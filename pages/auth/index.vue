@@ -97,16 +97,16 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 
 const activeTab = ref(0);
 
-const loginForm = reactive({
+const loginForm = ref({
   username: "",
   password: "",
 });
 
-const registerForm = reactive({
+const registerForm = ref({
   username: "",
   password: "",
   confirmPassword: "",
@@ -114,7 +114,7 @@ const registerForm = reactive({
 });
 
 const handleLogin = () => {
-  if (!loginForm.username || !loginForm.password) {
+  if (!loginForm.value.username || !loginForm.value.password) {
     uni.showToast({
       title: "请填写完整信息",
       icon: "none",
@@ -122,11 +122,15 @@ const handleLogin = () => {
     return;
   }
   // TODO: 实现登录逻辑
-  console.log("登录表单:", loginForm);
+  console.log("登录表单:", loginForm.value);
 };
 
 const handleRegister = () => {
-  if (!registerForm.username || !registerForm.password || !registerForm.confirmPassword) {
+  if (
+    !registerForm.value.username ||
+    !registerForm.value.password ||
+    !registerForm.value.confirmPassword
+  ) {
     uni.showToast({
       title: "请填写完整信息",
       icon: "none",
@@ -134,7 +138,7 @@ const handleRegister = () => {
     return;
   }
 
-  if (registerForm.password !== registerForm.confirmPassword) {
+  if (registerForm.value.password !== registerForm.value.confirmPassword) {
     uni.showToast({
       title: "两次输入的密码不一致",
       icon: "none",
@@ -143,7 +147,7 @@ const handleRegister = () => {
   }
 
   // TODO: 实现注册逻辑
-  console.log("注册表单:", registerForm);
+  console.log("注册表单:", registerForm.value);
 };
 </script>
 
