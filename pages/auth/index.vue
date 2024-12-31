@@ -201,142 +201,148 @@ const handleRegister = () => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page {
   min-height: 100vh;
   background: linear-gradient(to bottom, #fff5e6, #ffffff);
-  padding: 20px;
+  padding: 40rpx;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1200rpx;
   margin: 0 auto;
-  padding-top: 40px;
+  padding-top: 80rpx;
 }
 
 .logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 40px;
-}
+  margin-bottom: 80rpx;
 
-.logo {
-  width: 100px;
-  height: 100px;
-  animation: float 3s ease-in-out infinite;
-  filter: drop-shadow(0 10px 15px rgba(255, 153, 51, 0.2));
-  transform-origin: center;
-}
+  .logo {
+    width: 200rpx;
+    height: 200rpx;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 20rpx 30rpx rgba(255, 153, 51, 0.2));
+    transform-origin: center;
 
-.logo:hover {
-  animation-play-state: paused;
-  transform: scale(1.05);
-  transition: transform 0.3s ease;
-}
+    &:hover {
+      animation-play-state: paused;
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+  }
 
-.title {
-  margin-top: 20px;
-  font-size: 28px;
-  color: #333;
-  font-weight: 600;
-}
+  .title {
+    margin-top: 40rpx;
+    font-size: 56rpx;
+    color: #333;
+    font-weight: 600;
+  }
 
-.subtitle {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #666;
+  .subtitle {
+    margin-top: 16rpx;
+    font-size: 28rpx;
+    color: #666;
+  }
 }
 
 .card {
   background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 20px;
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.05);
+  padding: 40rpx;
 }
 
 .form-container {
-  padding: 20px 0 10px;
-  min-height: 360px;
+  padding: 40rpx 0 20rpx;
+  min-height: 720rpx;
   display: flex;
   flex-direction: column;
-  position: relative;
-  padding-bottom: 90px;
 }
 
 .role-section {
-  margin-bottom: 25px;
-}
+  margin-bottom: 50rpx;
 
-.role-title {
-  font-size: 15px;
-  color: #333;
-  margin-bottom: 12px;
-  display: block;
-  font-weight: 500;
+  .role-title {
+    font-size: 30rpx;
+    color: #333;
+    margin-bottom: 24rpx;
+    display: block;
+    font-weight: 500;
+  }
 }
 
 .role-options {
   display: flex;
-  gap: 12px;
+  gap: 24rpx;
 }
 
 .role-item {
   flex: 1;
   background-color: #fff9f0;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 24rpx;
+  padding: 24rpx;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
+  border: 4rpx solid transparent;
   cursor: pointer;
+
+  &:hover {
+    transform: translateY(-2rpx);
+    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+  }
+
+  &.active {
+    background-color: #fff0db;
+    border-color: #ff9933;
+  }
+
+  .role-name {
+    font-size: 30rpx;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+  }
 }
 
-.role-item:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
+.button-wrapper {
+  margin-top: auto;
+  padding-top: 60rpx;
+  position: relative;
 
-.role-item.active {
-  background-color: #fff0db;
-  border-color: #ff9933;
-}
-
-.role-name {
-  font-size: 15px;
-  font-weight: 500;
-  color: #333;
-  text-align: center;
+  &::before {
+    content: "";
+    position: absolute;
+    top: -100rpx;
+    left: 0;
+    right: 0;
+    height: 100rpx;
+    background: linear-gradient(to top, #ffffff, rgba(255, 255, 255, 0));
+    pointer-events: none;
+  }
 }
 
 :deep(.wd-tabs__nav) {
   background: transparent;
-  margin-bottom: 10px;
+  margin-bottom: 20rpx;
 }
 
 :deep(.wd-tabs__nav-item) {
-  font-size: 16px;
+  font-size: 32rpx;
   font-weight: 500;
 }
 
 :deep(.wd-input) {
-  margin-bottom: 20px;
-  border-radius: 8px;
+  margin-bottom: 40rpx;
+  border-radius: 16rpx;
   overflow: hidden;
 }
 
 :deep(.wd-button) {
-  height: 44px;
-  font-size: 16px;
-  border-radius: 8px;
-}
-
-.button-wrapper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 30px 0 10px;
-  background: linear-gradient(to top, #ffffff 50%, rgba(255, 255, 255, 0));
+  height: 88rpx;
+  font-size: 32rpx;
+  border-radius: 16rpx;
 }
 
 @keyframes float {
@@ -345,7 +351,7 @@ const handleRegister = () => {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-20rpx);
   }
 }
 
@@ -357,32 +363,36 @@ const handleRegister = () => {
 
   .card {
     background: #1a1a1a;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.2);
   }
 
-  .title {
-    color: #ffffff;
-  }
+  .logo-container {
+    .title {
+      color: #ffffff;
+    }
 
-  .subtitle {
-    color: #999;
+    .subtitle {
+      color: #999;
+    }
   }
 
   .role-item {
     background-color: #2a2a2a;
-  }
 
-  .role-item.active {
-    background-color: #4d2e00;
-    border-color: #ff9933;
-  }
+    &.active {
+      background-color: #4d2e00;
+      border-color: #ff9933;
+    }
 
-  .role-name {
-    color: #ffffff;
+    .role-name {
+      color: #ffffff;
+    }
   }
 
   .button-wrapper {
-    background: linear-gradient(to top, #1a1a1a 50%, rgba(26, 26, 26, 0));
+    &::before {
+      background: linear-gradient(to top, #1a1a1a, rgba(26, 26, 26, 0));
+    }
   }
 }
 </style>
