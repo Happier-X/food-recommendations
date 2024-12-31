@@ -30,7 +30,6 @@
           />
           <circle cx="140" cy="80" r="12" fill="#ff9933" />
         </svg>
-        <text class="title">美食推荐</text>
         <text class="subtitle">发现城市美味，分享舌尖故事</text>
       </view>
 
@@ -234,15 +233,8 @@ const handleRegister = () => {
     }
   }
 
-  .title {
-    margin-top: 40rpx;
-    font-size: 56rpx;
-    color: #333;
-    font-weight: 600;
-  }
-
   .subtitle {
-    margin-top: 16rpx;
+    margin-top: 40rpx;
     font-size: 28rpx;
     color: #666;
   }
@@ -367,10 +359,6 @@ const handleRegister = () => {
   }
 
   .logo-container {
-    .title {
-      color: #ffffff;
-    }
-
     .subtitle {
       color: #999;
     }
