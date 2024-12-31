@@ -1,98 +1,147 @@
 <template>
-  <view class="container">
-    <view class="logo-container">
-      <svg
-        class="logo"
-        viewBox="0 0 240 240"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="120" cy="120" r="110" fill="#f0f9ff" />
-        <circle cx="120" cy="100" r="40" fill="#0084ff" />
-        <path
-          d="M120 150c-33.137 0-60 20.373-60 45.5 0 1.657 1.343 3 3 3h114c1.657 0 3-1.343 3-3 0-25.127-26.863-45.5-60-45.5z"
-          fill="#0084ff"
-        />
-      </svg>
-      <text class="title">欢迎使用</text>
-    </view>
-
-    <wd-tabs v-model="activeTab">
-      <wd-tab title="登录">
-        <view class="form-container">
-          <wd-input
-            v-model="loginForm.username"
-            label="用户名"
-            placeholder="请输入用户名"
+  <view class="page">
+    <view class="container">
+      <view class="logo-container">
+        <svg
+          class="logo"
+          viewBox="0 0 240 240"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="120" cy="120" r="110" fill="#fff5e6" />
+          <circle
+            cx="120"
+            cy="120"
+            r="70"
+            fill="none"
+            stroke="#ff9933"
+            stroke-width="12"
           />
-          <wd-input
-            v-model="loginForm.password"
-            label="密码"
-            placeholder="请输入密码"
-            show-password
+          <path
+            d="M90 80v80M80 80v30M100 80v30"
+            stroke="#ff9933"
+            stroke-width="8"
+            stroke-linecap="round"
           />
-          <view class="button-wrapper">
-            <wd-button block type="primary" @click="handleLogin">
-              登录
-            </wd-button>
-          </view>
-        </view>
-      </wd-tab>
+          <path
+            d="M140 80v80"
+            stroke="#ff9933"
+            stroke-width="8"
+            stroke-linecap="round"
+          />
+          <circle cx="140" cy="80" r="12" fill="#ff9933" />
+        </svg>
+        <text class="title">美食推荐</text>
+        <text class="subtitle">发现城市美味，分享舌尖故事</text>
+      </view>
 
-      <wd-tab title="注册">
-        <view class="form-container">
-          <view class="role-section">
-            <text class="role-title">请选择用户类型</text>
-            <wd-radio-group v-model="registerForm.role" class="role-group">
-              <view class="role-options">
-                <view
-                  class="role-item"
-                  :class="{ active: registerForm.role === 'personal' }"
-                >
-                  <wd-radio value="personal">
-                    <view class="role-content">
-                      <text class="role-name">个人</text>
+      <view class="card">
+        <wd-tabs v-model="activeTab" class="auth-tabs">
+          <wd-tab title="登录">
+            <view class="form-container">
+              <view class="role-section">
+                <text class="role-title">请选择登录身份</text>
+                <wd-radio-group v-model="loginForm.role" class="role-group">
+                  <view class="role-options">
+                    <view
+                      class="role-item"
+                      :class="{ active: loginForm.role === 'personal' }"
+                    >
+                      <wd-radio value="personal">
+                        <view class="role-content">
+                          <text class="role-name">个人</text>
+                        </view>
+                      </wd-radio>
                     </view>
-                  </wd-radio>
-                </view>
-                <view
-                  class="role-item"
-                  :class="{ active: registerForm.role === 'business' }"
-                >
-                  <wd-radio value="business">
-                    <view class="role-content">
-                      <text class="role-name">商家</text>
+                    <view
+                      class="role-item"
+                      :class="{ active: loginForm.role === 'business' }"
+                    >
+                      <wd-radio value="business">
+                        <view class="role-content">
+                          <text class="role-name">商家</text>
+                        </view>
+                      </wd-radio>
                     </view>
-                  </wd-radio>
-                </view>
+                  </view>
+                </wd-radio-group>
               </view>
-            </wd-radio-group>
-          </view>
 
-          <wd-input
-            v-model="registerForm.username"
-            label="用户名"
-            placeholder="请输入用户名"
-          />
-          <wd-input
-            v-model="registerForm.password"
-            label="密码"
-            placeholder="请输入密码"
-            show-password
-          />
-          <wd-input
-            v-model="registerForm.confirmPassword"
-            label="确认密码"
-            placeholder="请再次输入密码"
-            show-password
-          />
-          <view class="button-wrapper">
-            <wd-button block type="primary" @click="handleRegister">
-              注册
-            </wd-button>
-          </view>
-        </view>
-      </wd-tab>
-    </wd-tabs>
+              <wd-input
+                v-model="loginForm.username"
+                label="用户名"
+                placeholder="请输入用户名"
+              />
+              <wd-input
+                v-model="loginForm.password"
+                label="密码"
+                placeholder="请输入密码"
+                show-password
+              />
+              <view class="button-wrapper">
+                <wd-button block type="primary" @click="handleLogin">
+                  登录
+                </wd-button>
+              </view>
+            </view>
+          </wd-tab>
+
+          <wd-tab title="注册">
+            <view class="form-container">
+              <view class="role-section">
+                <text class="role-title">请选择用户类型</text>
+                <wd-radio-group v-model="registerForm.role" class="role-group">
+                  <view class="role-options">
+                    <view
+                      class="role-item"
+                      :class="{ active: registerForm.role === 'personal' }"
+                    >
+                      <wd-radio value="personal">
+                        <view class="role-content">
+                          <text class="role-name">个人</text>
+                        </view>
+                      </wd-radio>
+                    </view>
+                    <view
+                      class="role-item"
+                      :class="{ active: registerForm.role === 'business' }"
+                    >
+                      <wd-radio value="business">
+                        <view class="role-content">
+                          <text class="role-name">商家</text>
+                        </view>
+                      </wd-radio>
+                    </view>
+                  </view>
+                </wd-radio-group>
+              </view>
+
+              <wd-input
+                v-model="registerForm.username"
+                label="用户名"
+                placeholder="请输入用户名"
+              />
+              <wd-input
+                v-model="registerForm.password"
+                label="密码"
+                placeholder="请输入密码"
+                show-password
+              />
+              <wd-input
+                v-model="registerForm.confirmPassword"
+                label="确认密码"
+                placeholder="请再次输入密码"
+                show-password
+              />
+              <view class="button-wrapper">
+                <wd-button block type="primary" @click="handleRegister">
+                  注册
+                </wd-button>
+              </view>
+            </view>
+          </wd-tab>
+        </wd-tabs>
+      </view>
+    </view>
   </view>
 </template>
 
@@ -104,6 +153,7 @@ const activeTab = ref(0);
 const loginForm = ref({
   username: "",
   password: "",
+  role: "personal",
 });
 
 const registerForm = ref({
@@ -152,22 +202,141 @@ const handleRegister = () => {
 </script>
 
 <style scoped>
-.container {
+.page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #fff5e6, #ffffff);
   padding: 20px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: 40px;
 }
 
 .logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 30px;
-  padding: 20px 0;
+  margin-bottom: 40px;
 }
 
 .logo {
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 10px 15px rgba(255, 153, 51, 0.2));
+  transform-origin: center;
+}
+
+.logo:hover {
+  animation-play-state: paused;
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.title {
+  margin-top: 20px;
+  font-size: 28px;
+  color: #333;
+  font-weight: 600;
+}
+
+.subtitle {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+
+.form-container {
+  padding: 20px 0 10px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 90px;
+}
+
+.role-section {
+  margin-bottom: 25px;
+}
+
+.role-title {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 12px;
+  display: block;
+  font-weight: 500;
+}
+
+.role-options {
+  display: flex;
+  gap: 12px;
+}
+
+.role-item {
+  flex: 1;
+  background-color: #fff9f0;
+  border-radius: 12px;
+  padding: 12px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.role-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.role-item.active {
+  background-color: #fff0db;
+  border-color: #ff9933;
+}
+
+.role-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+}
+
+:deep(.wd-tabs__nav) {
+  background: transparent;
+  margin-bottom: 10px;
+}
+
+:deep(.wd-tabs__nav-item) {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+:deep(.wd-input) {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+:deep(.wd-button) {
+  height: 44px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.button-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 0 10px;
+  background: linear-gradient(to top, #ffffff 50%, rgba(255, 255, 255, 0));
 }
 
 @keyframes float {
@@ -180,93 +349,40 @@ const handleRegister = () => {
   }
 }
 
-.title {
-  margin-top: 15px;
-  font-size: 24px;
-  color: #333;
-  font-weight: 500;
-}
+/* 适配暗色模式 */
+@media (prefers-color-scheme: dark) {
+  .page {
+    background: linear-gradient(to bottom, #1a1a1a, #000000);
+  }
 
-.form-container {
-  padding: 20px 0;
-}
+  .card {
+    background: #1a1a1a;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
 
-.button-wrapper {
-  margin-top: 30px;
-}
+  .title {
+    color: #ffffff;
+  }
 
-:deep(.wd-radio-group) {
-  margin: 20px 0;
-}
+  .subtitle {
+    color: #999;
+  }
 
-:deep(.wd-radio) {
-  margin-right: 0;
-  width: 100%;
-  padding: 0;
-}
+  .role-item {
+    background-color: #2a2a2a;
+  }
 
-:deep(.wd-radio__label) {
-  flex: 1;
-  margin: 0;
-  padding: 0;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-}
+  .role-item.active {
+    background-color: #4d2e00;
+    border-color: #ff9933;
+  }
 
-:deep(.wd-radio__shape) {
-  display: none !important;
-  width: 0;
-  margin: 0;
-}
+  .role-name {
+    color: #ffffff;
+  }
 
-:deep(.wd-input) {
-  margin-bottom: 20px;
-}
-
-.role-section {
-  margin-bottom: 30px;
-}
-
-.role-title {
-  font-size: 16px;
-  color: #333;
-  margin-bottom: 15px;
-  display: block;
-}
-
-.role-options {
-  display: flex;
-  gap: 15px;
-}
-
-.role-item {
-  flex: 1;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  padding: 12px 15px;
-  transition: all 0.3s;
-  border: 2px solid transparent;
-  cursor: pointer;
-}
-
-.role-item.active {
-  background-color: #f0f9ff;
-  border-color: #0084ff;
-}
-
-.role-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.role-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  text-align: center;
-  width: 100%;
+  .button-wrapper {
+    background: linear-gradient(to top, #1a1a1a 50%, rgba(26, 26, 26, 0));
+  }
 }
 </style>
