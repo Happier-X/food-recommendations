@@ -1,11 +1,18 @@
 <template>
   <view class="container">
     <view class="logo-container">
-      <image 
-        class="logo" 
-        src="/static/images/logo.png" 
-        mode="aspectFit"
-      />
+      <svg
+        class="logo"
+        viewBox="0 0 240 240"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="120" cy="120" r="110" fill="#f0f9ff" />
+        <circle cx="120" cy="100" r="40" fill="#0084ff" />
+        <path
+          d="M120 150c-33.137 0-60 20.373-60 45.5 0 1.657 1.343 3 3 3h114c1.657 0 3-1.343 3-3 0-25.127-26.863-45.5-60-45.5z"
+          fill="#0084ff"
+        />
+      </svg>
       <text class="title">欢迎使用</text>
     </view>
 
@@ -37,19 +44,23 @@
             <text class="role-title">请选择用户类型</text>
             <wd-radio-group v-model="registerForm.role" class="role-group">
               <view class="role-options">
-                <view class="role-item" :class="{ active: registerForm.role === 'personal' }">
+                <view
+                  class="role-item"
+                  :class="{ active: registerForm.role === 'personal' }"
+                >
                   <wd-radio value="personal">
                     <view class="role-content">
-                      <text class="role-name">个人用户</text>
-                      <text class="role-desc">适用于普通用户购物</text>
+                      <text class="role-name">个人</text>
                     </view>
                   </wd-radio>
                 </view>
-                <view class="role-item" :class="{ active: registerForm.role === 'business' }">
+                <view
+                  class="role-item"
+                  :class="{ active: registerForm.role === 'business' }"
+                >
                   <wd-radio value="business">
                     <view class="role-content">
                       <text class="role-name">商家</text>
-                      <text class="role-desc">适用于商家管理店铺</text>
                     </view>
                   </wd-radio>
                 </view>
@@ -66,6 +77,12 @@
             v-model="registerForm.password"
             label="密码"
             placeholder="请输入密码"
+            show-password
+          />
+          <wd-input
+            v-model="registerForm.confirmPassword"
+            label="确认密码"
+            placeholder="请再次输入密码"
             show-password
           />
           <view class="button-wrapper">
@@ -92,6 +109,7 @@ const loginForm = reactive({
 const registerForm = reactive({
   username: "",
   password: "",
+  confirmPassword: "",
   role: "personal",
 });
 
@@ -108,13 +126,22 @@ const handleLogin = () => {
 };
 
 const handleRegister = () => {
-  if (!registerForm.username || !registerForm.password) {
+  if (!registerForm.username || !registerForm.password || !registerForm.confirmPassword) {
     uni.showToast({
       title: "请填写完整信息",
       icon: "none",
     });
     return;
   }
+
+  if (registerForm.password !== registerForm.confirmPassword) {
+    uni.showToast({
+      title: "两次输入的密码不一致",
+      icon: "none",
+    });
+    return;
+  }
+
   // TODO: 实现注册逻辑
   console.log("注册表单:", registerForm);
 };
@@ -136,6 +163,17 @@ const handleRegister = () => {
 .logo {
   width: 120px;
   height: 120px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .title {
@@ -158,7 +196,24 @@ const handleRegister = () => {
 }
 
 :deep(.wd-radio) {
-  margin-right: 20px;
+  margin-right: 0;
+  width: 100%;
+  padding: 0;
+}
+
+:deep(.wd-radio__label) {
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+:deep(.wd-radio__shape) {
+  display: none !important;
+  width: 0;
+  margin: 0;
 }
 
 :deep(.wd-input) {
@@ -185,9 +240,10 @@ const handleRegister = () => {
   flex: 1;
   background-color: #f8f8f8;
   border-radius: 8px;
-  padding: 15px;
+  padding: 12px 15px;
   transition: all 0.3s;
   border: 2px solid transparent;
+  cursor: pointer;
 }
 
 .role-item.active {
@@ -198,30 +254,15 @@ const handleRegister = () => {
 .role-content {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  width: 100%;
 }
 
 .role-name {
   font-size: 16px;
   font-weight: 500;
   color: #333;
-}
-
-.role-desc {
-  font-size: 12px;
-  color: #999;
-}
-
-:deep(.wd-radio) {
-  margin-right: 0;
+  text-align: center;
   width: 100%;
-}
-
-:deep(.wd-radio__label) {
-  flex: 1;
-}
-
-:deep(.wd-radio__shape) {
-  margin-right: 10px;
 }
 </style>
