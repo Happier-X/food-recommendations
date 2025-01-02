@@ -37,34 +37,6 @@
         <wd-tabs v-model="activeTab" class="auth-tabs">
           <wd-tab title="登录">
             <view class="form-container">
-              <view class="role-section">
-                <text class="role-title">请选择登录身份</text>
-                <wd-radio-group v-model="loginForm.role" class="role-group">
-                  <view class="role-options">
-                    <view
-                      class="role-item"
-                      :class="{ active: loginForm.role === 'personal' }"
-                    >
-                      <wd-radio value="personal">
-                        <view class="role-content">
-                          <text class="role-name">个人</text>
-                        </view>
-                      </wd-radio>
-                    </view>
-                    <view
-                      class="role-item"
-                      :class="{ active: loginForm.role === 'business' }"
-                    >
-                      <wd-radio value="business">
-                        <view class="role-content">
-                          <text class="role-name">商家</text>
-                        </view>
-                      </wd-radio>
-                    </view>
-                  </view>
-                </wd-radio-group>
-              </view>
-
               <wd-input
                 v-model="loginForm.username"
                 label="用户名"
@@ -152,7 +124,6 @@ const activeTab = ref(0);
 const loginForm = ref({
   username: "",
   password: "",
-  role: "personal",
 });
 
 const registerForm = ref({
@@ -335,6 +306,20 @@ const handleRegister = () => {
   height: 88rpx;
   font-size: 32rpx;
   border-radius: 16rpx;
+  padding: 0;
+  line-height: 88rpx !important;
+
+  &--block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__text {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+  }
 }
 
 @keyframes float {
@@ -382,5 +367,45 @@ const handleRegister = () => {
       background: linear-gradient(to top, #1a1a1a, rgba(26, 26, 26, 0));
     }
   }
+}
+
+/* 更新隐藏单选框对号的样式 */
+:deep(.wd-radio) {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  .wd-radio__shape {
+    display: none !important;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+  }
+
+  .wd-radio__label {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* 确保选项内容居中 */
+.role-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+}
+
+.role-name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  width: 100%;
 }
 </style>
