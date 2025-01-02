@@ -15,11 +15,12 @@
             <view class="card-content">
               <text class="title">{{ item.title }}</text>
               <view class="user-info">
-                <image :src="item.avatar" class="avatar" mode="aspectFill" />
-                <text class="username">{{ item.username }}</text>
-                <view class="likes">
-                  <wd-icon name="heart" size="12px" />
-                  <text>{{ item.likes }}</text>
+                <view class="user-left">
+                  <image :src="item.avatar" class="avatar" mode="aspectFill" />
+                  <text class="username">{{ item.username }}</text>
+                </view>
+                <view class="rating">
+                  <text class="rating-text">{{ item.rating.toFixed(1) }}</text>
                 </view>
               </view>
             </view>
@@ -42,7 +43,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&w=50&h=50",
     username: "美食达人",
-    likes: 1234,
+    rating: 4.8,
   },
   {
     title: "探店 | 这家藏在巷子里的小店太惊艳了",
@@ -51,7 +52,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&w=50&h=50",
     username: "吃货小王",
-    likes: 856,
+    rating: 4.5,
   },
   {
     title: "重庆火锅太香了！麻辣鲜香，让人欲罢不能",
@@ -60,7 +61,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&w=50&h=50",
     username: "火锅控",
-    likes: 2341,
+    rating: 4.9,
   },
   {
     title: "广州早茶 | 每天都要从一笼虾饺开始",
@@ -69,7 +70,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-4.0.3&w=50&h=50",
     username: "粤式生活",
-    likes: 1567,
+    rating: 4.7,
   },
   {
     title: "自制咖啡拉花，在家也能享受精致下午茶",
@@ -78,7 +79,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&w=50&h=50",
     username: "咖啡师小K",
-    likes: 988,
+    rating: 4.3,
   },
   {
     title: "超正宗的意大利披萨，薄脆可口",
@@ -87,7 +88,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&w=50&h=50",
     username: "披萨达人",
-    likes: 1765,
+    rating: 4.6,
   },
   {
     title: "法式甜点 | 马卡龙的彩虹色诱惑",
@@ -96,7 +97,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&w=50&h=50",
     username: "甜点控",
-    likes: 2156,
+    rating: 4.8,
   },
   {
     title: "泰国街头美食，酸辣鲜香样样全",
@@ -105,7 +106,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?ixlib=rb-4.0.3&w=50&h=50",
     username: "泰式美食",
-    likes: 1432,
+    rating: 4.4,
   },
   {
     title: "精致日式寿司拼盘，色香味俱全",
@@ -114,7 +115,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&w=50&h=50",
     username: "寿司匠人",
-    likes: 3245,
+    rating: 4.9,
   },
   {
     title: "韩式部队锅，暖心又暖胃",
@@ -123,7 +124,7 @@ const list = ref([
     avatar:
       "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-4.0.3&w=50&h=50",
     username: "韩食达人",
-    likes: 1876,
+    rating: 4.7,
   },
 ]);
 
@@ -135,6 +136,13 @@ const handleItemClick = (item) => {
 </script>
 
 <style lang="scss" scoped>
+// 文本省略混入
+@mixin text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .home-container {
   min-height: 100vh;
   background-color: #f8f8f8;
@@ -160,33 +168,50 @@ const handleItemClick = (item) => {
       line-height: 1.4;
       margin-bottom: 16rpx;
       font-weight: 500;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
 
     .user-info {
       display: flex;
       align-items: center;
+      justify-content: space-between;
 
-      .avatar {
-        width: 40rpx;
-        height: 40rpx;
-        border-radius: 50%;
-        margin-right: 12rpx;
-      }
-
-      .username {
-        font-size: 24rpx;
-        color: #666;
-        flex: 1;
-      }
-
-      .likes {
+      .user-left {
         display: flex;
         align-items: center;
-        font-size: 24rpx;
-        color: #999;
+        flex: 1;
+        min-width: 0; // 防止子元素溢出
+
+        .avatar {
+          width: 40rpx;
+          height: 40rpx;
+          border-radius: 50%;
+          margin-right: 12rpx;
+        }
+
+        .username {
+          font-size: 24rpx;
+          color: #666;
+          @include text-ellipsis;
+        }
+      }
+
+      .rating {
+        display: flex;
+        align-items: center;
 
         .wd-icon {
-          margin-right: 4rpx;
+          margin-right: 2rpx;
+        }
+
+        .rating-text {
+          margin-left: 8rpx;
+          font-size: 24rpx;
+          color: #ffc300;
+          font-weight: 500;
         }
       }
     }
