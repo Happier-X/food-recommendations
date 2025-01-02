@@ -144,6 +144,9 @@ const handleSubmit = () => {
       });
       return;
     }
+    uni.switchTab({
+      url: "/pages/home/index",
+    });
     console.log("登录表单:", loginForm.value);
   } else {
     // 注册逻辑
