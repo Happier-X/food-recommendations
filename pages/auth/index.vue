@@ -186,7 +186,7 @@ const handleSubmit = () => {
 
 .auth-container {
   height: 100vh;
-  background: linear-gradient(to bottom, #fff5f5, #ffe8e8);
+  background: linear-gradient(to bottom, #fffbeb, #fff8e1);
   @include flex-center;
 }
 
@@ -210,7 +210,7 @@ const handleSubmit = () => {
     background: #fff;
     border-radius: 45rpx;
     @include flex-center;
-    box-shadow: 0 8rpx 16rpx rgba(255, 107, 107, 0.1);
+    box-shadow: 0 8rpx 16rpx rgba(255, 195, 0, 0.1);
     margin-bottom: 30rpx;
 
     .logo {
@@ -221,16 +221,16 @@ const handleSubmit = () => {
 
   .subtitle {
     font-size: 28rpx;
-    color: #ff6b6b;
+    color: #ffb000;
     font-weight: 500;
-    text-shadow: 0 2rpx 4rpx rgba(255, 107, 107, 0.1);
+    text-shadow: 0 2rpx 4rpx rgba(255, 195, 0, 0.2);
   }
 }
 
 .form-card {
   height: 50vh;
   border-radius: 40rpx;
-  box-shadow: 0 4rpx 20rpx rgba(255, 107, 107, 0.08);
+  box-shadow: 0 4rpx 20rpx rgba(255, 195, 0, 0.08);
   background: #fff;
 
   .auth-tabs {

@@ -17,6 +17,6 @@ export default {
 /* 添加这段样式后，默认 Button 底色会变成绿色 */
 :root,
 page {
-  --wot-color-theme: #ff6b6b;
+  --wot-color-theme: #ffc600;
 }
 </style>
