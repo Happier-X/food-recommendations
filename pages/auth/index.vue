@@ -1,117 +1,117 @@
 <template>
-  <view class="page">
-    <view class="container">
-      <view class="logo-container">
-        <svg
-          class="logo"
-          viewBox="0 0 240 240"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="120" cy="120" r="110" fill="#fff5e6" />
-          <circle
-            cx="120"
-            cy="120"
-            r="70"
-            fill="none"
-            stroke="#ff9933"
-            stroke-width="12"
-          />
-          <path
-            d="M90 80v80M80 80v30M100 80v30"
-            stroke="#ff9933"
-            stroke-width="8"
-            stroke-linecap="round"
-          />
-          <path
-            d="M140 80v80"
-            stroke="#ff9933"
-            stroke-width="8"
-            stroke-linecap="round"
-          />
-          <circle cx="140" cy="80" r="12" fill="#ff9933" />
-        </svg>
-        <text class="subtitle">发现城市美味，分享舌尖故事</text>
+  <view class="auth-container">
+    <view class="auth-page">
+      <!-- Logo区域 -->
+      <view class="logo-box">
+        <view class="logo-wrapper">
+          <image src="/static/logo.png" mode="aspectFit" class="logo" />
+        </view>
+        <text class="subtitle">发现身边美食，分享舌尖故事</text>
       </view>
 
-      <view class="card">
+      <wd-card class="form-card">
         <wd-tabs v-model="activeTab" class="auth-tabs">
           <wd-tab title="登录">
-            <view class="form-container">
-              <wd-input
-                v-model="loginForm.username"
-                label="用户名"
-                placeholder="请输入用户名"
-              />
-              <wd-input
-                v-model="loginForm.password"
-                label="密码"
-                placeholder="请输入密码"
-                show-password
-              />
-              <view class="button-wrapper">
-                <wd-button block type="primary" @click="handleLogin">
-                  登录
-                </wd-button>
+            <view class="form">
+              <view class="role-box" style="opacity: 0">
+                <wd-radio-group shape="button">
+                  <wd-radio value="personal">个人用户</wd-radio>
+                  <wd-radio value="business">商家用户</wd-radio>
+                </wd-radio-group>
+              </view>
+              <view class="form-item">
+                <wd-input
+                  label="用户名"
+                  label-width="25%"
+                  width="100%"
+                  v-model="loginForm.username"
+                  placeholder="请输入用户名"
+                  clearable
+                />
+              </view>
+              <view class="form-item">
+                <wd-input
+                  label="密码"
+                  label-width="25%"
+                  width="100%"
+                  v-model="loginForm.password"
+                  placeholder="请输入密码"
+                  clearable
+                  show-password
+                  type="password"
+                />
+              </view>
+              <view class="form-item" v-show="false">
+                <wd-input
+                  label="确认密码"
+                  label-width="25%"
+                  width="100%"
+                  v-model="registerForm.confirmPassword"
+                  placeholder="请再次输入密码"
+                  show-password
+                  type="password"
+                  clearable
+                />
               </view>
             </view>
           </wd-tab>
 
           <wd-tab title="注册">
-            <view class="form-container">
-              <view class="role-section">
-                <text class="role-title">请选择用户类型</text>
-                <wd-radio-group v-model="registerForm.role" class="role-group">
-                  <view class="role-options">
-                    <view
-                      class="role-item"
-                      :class="{ active: registerForm.role === 'personal' }"
-                    >
-                      <wd-radio value="personal">
-                        <view class="role-content">
-                          <text class="role-name">个人</text>
-                        </view>
-                      </wd-radio>
-                    </view>
-                    <view
-                      class="role-item"
-                      :class="{ active: registerForm.role === 'business' }"
-                    >
-                      <wd-radio value="business">
-                        <view class="role-content">
-                          <text class="role-name">商家</text>
-                        </view>
-                      </wd-radio>
-                    </view>
-                  </view>
+            <view class="form">
+              <view class="role-box">
+                <wd-radio-group v-model="registerForm.role" shape="button">
+                  <wd-radio value="personal">个人用户</wd-radio>
+                  <wd-radio value="business">商家用户</wd-radio>
                 </wd-radio-group>
               </view>
-
-              <wd-input
-                v-model="registerForm.username"
-                label="用户名"
-                placeholder="请输入用户名"
-              />
-              <wd-input
-                v-model="registerForm.password"
-                label="密码"
-                placeholder="请输入密码"
-                show-password
-              />
-              <wd-input
-                v-model="registerForm.confirmPassword"
-                label="确认密码"
-                placeholder="请再次输入密码"
-                show-password
-              />
-              <view class="button-wrapper">
-                <wd-button block type="primary" @click="handleRegister">
-                  注册
-                </wd-button>
+              <view class="form-item">
+                <wd-input
+                  label="用户名"
+                  label-width="25%"
+                  width="100%"
+                  v-model="registerForm.username"
+                  placeholder="请输入用户名"
+                  clearable
+                />
+              </view>
+              <view class="form-item">
+                <wd-input
+                  label="密码"
+                  label-width="25%"
+                  width="100%"
+                  v-model="registerForm.password"
+                  placeholder="请输入密码"
+                  show-password
+                  clearable
+                  type="password"
+                />
+              </view>
+              <view class="form-item">
+                <wd-input
+                  label="确认密码"
+                  label-width="25%"
+                  width="100%"
+                  v-model="registerForm.confirmPassword"
+                  placeholder="请再次输入密码"
+                  show-password
+                  type="password"
+                  clearable
+                />
               </view>
             </view>
           </wd-tab>
         </wd-tabs>
-      </view>
+
+        <!-- 共用的提交按钮 -->
+        <wd-button
+          block
+          type="primary"
+          @click="handleSubmit"
+          class="submit-btn"
+        >
+          {{ activeTab === 0 ? "登录" : "注册" }}
+        </wd-button>
+      </wd-card>
     </view>
   </view>
 </template>
@@ -133,279 +133,119 @@ const registerForm = ref({
   role: "personal",
 });
 
-const handleLogin = () => {
-  if (!loginForm.value.username || !loginForm.value.password) {
-    uni.showToast({
-      title: "请填写完整信息",
-      icon: "none",
-    });
-    return;
-  }
-  // TODO: 实现登录逻辑
-  console.log("登录表单:", loginForm.value);
-};
+// 统一的提交处理函数
+const handleSubmit = () => {
+  if (activeTab.value === 0) {
+    // 登录逻辑
+    if (!loginForm.value.username || !loginForm.value.password) {
+      uni.showToast({
+        title: "请填写完整信息",
+        icon: "none",
+      });
+      return;
+    }
+    console.log("登录表单:", loginForm.value);
+  } else {
+    // 注册逻辑
+    if (
+      !registerForm.value.username ||
+      !registerForm.value.password ||
+      !registerForm.value.confirmPassword
+    ) {
+      uni.showToast({
+        title: "请填写完整信息",
+        icon: "none",
+      });
+      return;
+    }
 
-const handleRegister = () => {
-  if (
-    !registerForm.value.username ||
-    !registerForm.value.password ||
-    !registerForm.value.confirmPassword
-  ) {
-    uni.showToast({
-      title: "请填写完整信息",
-      icon: "none",
-    });
-    return;
+    if (registerForm.value.password !== registerForm.value.confirmPassword) {
+      uni.showToast({
+        title: "两次输入的密码不一致",
+        icon: "none",
+      });
+      return;
+    }
+    console.log("注册表单:", registerForm.value);
   }
-
-  if (registerForm.value.password !== registerForm.value.confirmPassword) {
-    uni.showToast({
-      title: "两次输入的密码不一致",
-      icon: "none",
-    });
-    return;
-  }
-
-  // TODO: 实现注册逻辑
-  console.log("注册表单:", registerForm.value);
 };
 </script>
 
 <style lang="scss" scoped>
-.page {
-  min-height: 100vh;
-  background: linear-gradient(to bottom, #fff5e6, #ffffff);
-  padding: 40rpx;
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.container {
-  max-width: 1200rpx;
-  margin: 0 auto;
-  padding-top: 80rpx;
-}
-
-.logo-container {
+@mixin flex-column {
   display: flex;
   flex-direction: column;
+}
+
+.auth-container {
+  height: 100vh;
+  background: linear-gradient(to bottom, #f8f9fa, #e9ecef);
+  @include flex-center;
+}
+
+.auth-page {
+  width: 100%;
+  height: 100%;
+  @include flex-column;
+  box-sizing: border-box;
+  padding: 30rpx;
+}
+
+.logo-box {
+  height: 30vh;
+  @include flex-column;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 80rpx;
 
-  .logo {
-    width: 200rpx;
-    height: 200rpx;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 20rpx 30rpx rgba(255, 153, 51, 0.2));
-    transform-origin: center;
+  .logo-wrapper {
+    width: 180rpx;
+    height: 180rpx;
+    background: #fff;
+    border-radius: 45rpx;
+    @include flex-center;
+    box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.05);
+    margin-bottom: 30rpx;
 
-    &:hover {
-      animation-play-state: paused;
-      transform: scale(1.05);
-      transition: transform 0.3s ease;
+    .logo {
+      width: 130rpx;
+      height: 130rpx;
     }
   }
 
   .subtitle {
-    margin-top: 40rpx;
     font-size: 28rpx;
     color: #666;
   }
 }
 
-.card {
-  background: #ffffff;
-  border-radius: 32rpx;
-  box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.05);
-  padding: 40rpx;
-}
+.form-card {
+  height: 50vh;
+  border-radius: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.05);
+  background: #fff;
 
-.form-container {
-  padding: 40rpx 0 20rpx;
-  min-height: 720rpx;
-  display: flex;
-  flex-direction: column;
-}
-
-.role-section {
-  margin-bottom: 50rpx;
-
-  .role-title {
-    font-size: 30rpx;
-    color: #333;
-    margin-bottom: 24rpx;
-    display: block;
-    font-weight: 500;
-  }
-}
-
-.role-options {
-  display: flex;
-  gap: 24rpx;
-}
-
-.role-item {
-  flex: 1;
-  background-color: #fff9f0;
-  border-radius: 24rpx;
-  padding: 24rpx;
-  transition: all 0.3s ease;
-  border: 4rpx solid transparent;
-  cursor: pointer;
-
-  &:hover {
-    transform: translateY(-2rpx);
-    box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
-  }
-
-  &.active {
-    background-color: #fff0db;
-    border-color: #ff9933;
-  }
-
-  .role-name {
-    font-size: 30rpx;
-    font-weight: 500;
-    color: #333;
-    text-align: center;
-  }
-}
-
-.button-wrapper {
-  margin-top: auto;
-  padding-top: 60rpx;
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: -100rpx;
-    left: 0;
-    right: 0;
-    height: 100rpx;
-    background: linear-gradient(to top, #ffffff, rgba(255, 255, 255, 0));
-    pointer-events: none;
-  }
-}
-
-:deep(.wd-tabs__nav) {
-  background: transparent;
-  margin-bottom: 20rpx;
-}
-
-:deep(.wd-tabs__nav-item) {
-  font-size: 32rpx;
-  font-weight: 500;
-}
-
-:deep(.wd-input) {
-  margin-bottom: 40rpx;
-  border-radius: 16rpx;
-  overflow: hidden;
-}
-
-:deep(.wd-button) {
-  height: 88rpx;
-  font-size: 32rpx;
-  border-radius: 16rpx;
-  padding: 0;
-  line-height: 88rpx !important;
-
-  &--block {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__text {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20rpx);
-  }
-}
-
-/* 适配暗色模式 */
-@media (prefers-color-scheme: dark) {
-  .page {
-    background: linear-gradient(to bottom, #1a1a1a, #000000);
-  }
-
-  .card {
-    background: #1a1a1a;
-    box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.2);
-  }
-
-  .logo-container {
-    .subtitle {
-      color: #999;
-    }
-  }
-
-  .role-item {
-    background-color: #2a2a2a;
-
-    &.active {
-      background-color: #4d2e00;
-      border-color: #ff9933;
-    }
-
-    .role-name {
-      color: #ffffff;
-    }
-  }
-
-  .button-wrapper {
-    &::before {
-      background: linear-gradient(to top, #1a1a1a, rgba(26, 26, 26, 0));
-    }
-  }
-}
-
-/* 更新隐藏单选框对号的样式 */
-:deep(.wd-radio) {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-
-  .wd-radio__shape {
-    display: none !important;
-    width: 0;
-    height: 0;
-    margin: 0;
-    padding: 0;
-    opacity: 0;
-  }
-
-  .wd-radio__label {
-    margin: 0;
-    padding: 0;
+  .auth-tabs {
+    height: 35vh;
     width: 100%;
-    text-align: center;
+
+    .form {
+      .form-item {
+        margin-bottom: 20rpx;
+      }
+      .role-box {
+        margin: 20rpx 0;
+        display: flex;
+        justify-content: center;
+        gap: 40rpx;
+      }
+    }
   }
-}
-
-/* 确保选项内容居中 */
-.role-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 0;
-}
-
-.role-name {
-  font-size: 30rpx;
-  font-weight: 500;
-  color: #333;
-  text-align: center;
-  width: 100%;
 }
 </style>
