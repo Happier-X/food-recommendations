@@ -40,6 +40,7 @@
               v-model="formData.rating"
               :max="5"
               :size="18"
+              space="18rpx"
               active-color="#FFC600"
             />
             <text class="rating-text">{{ formData.rating.toFixed(1) }}</text>
@@ -49,22 +50,17 @@
 
       <!-- 食物类型 -->
       <wd-cell-group>
-        <wd-cell
-          title="食物类型"
-          title-width="140rpx"
-          :value="formData.foodType || '请选择食物类型'"
-          is-link
-          @click="showFoodTypePicker = true"
+        <!-- 食物类型选择器 -->
+        <wd-picker
+          v-model="formData.foodType"
+          :columns="foodTypes"
+          title="选择食物类型"
+          label="食物类型"
+          label-width="140rpx"
+          @confirm="onFoodTypeConfirm"
+          @cancel="onFoodTypeCancel"
         />
       </wd-cell-group>
-
-      <!-- 食物类型选择器 -->
-      <wd-picker
-        v-model="showFoodTypePicker"
-        :columns="foodTypes"
-        @confirm="onFoodTypeConfirm"
-        title="选择食物类型"
-      />
 
       <!-- 推荐理由 -->
       <wd-textarea
@@ -80,12 +76,12 @@
       <view class="upload-box">
         <text class="label">上传图片</text>
         <wd-upload
-          v-model="formData.images"
-          :max-count="9"
+          accept="image"
+          v-model:file-list="formData.images"
+          :limit="3"
           multiple
-          @success="onUploadSuccess"
+          action="https://mockapi.eolink.com/zhTuw2P8c29bc981a741931bdd86eb04dc1e8fd64865cb5/upload"
         >
-          <wd-button size="small" type="info">选择图片</wd-button>
         </wd-upload>
       </view>
 
@@ -98,10 +94,10 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 
 // 表单数据
-const formData = reactive({
+const formData = ref({
   title: "",
   shopName: "",
   location: "",
@@ -111,69 +107,90 @@ const formData = reactive({
   images: [],
 });
 
-// 食物类型选择器
-const showFoodTypePicker = ref(false);
 const foodTypes = [
-  { label: "中餐", value: "chinese" },
-  { label: "西餐", value: "western" },
-  { label: "日料", value: "japanese" },
-  { label: "韩餐", value: "korean" },
-  { label: "甜点", value: "dessert" },
-  { label: "饮品", value: "drinks" },
-  { label: "小吃", value: "snacks" },
-  { label: "其他", value: "others" },
+  { value: 1, label: "饺子馄饨" },
+  { value: 2, label: "火锅烤肉" },
+  { value: 3, label: "包子粥面" },
+  { value: 4, label: "快餐便当" },
+  { value: 5, label: "汉堡薯条" },
+  { value: 6, label: "意面披萨" },
+  { value: 7, label: "川湘菜" },
+  { value: 8, label: "地方菜系" },
+  { value: 9, label: "炸鸡炸串" },
+  { value: 10, label: "特色小吃" },
+  { value: 11, label: "西餐" },
+  { value: 12, label: "日料寿司" },
+  { value: 13, label: "韩式料理" },
 ];
 
 // 选择位置
 const chooseLocation = () => {
   uni.chooseLocation({
     success: (res) => {
-      formData.location = res.address;
+      formData.value.location = res.address;
+    },
+    fail: () => {
+      uni.showToast({
+        title: "选择位置失败",
+        icon: "none",
+      });
     },
   });
 };
 
 // 食物类型确认
 const onFoodTypeConfirm = (value) => {
-  formData.foodType = value.label;
-};
-
-// 图片上传成功
-const onUploadSuccess = (res) => {
-  console.log("上传成功：", res);
+  formData.value.foodType = value.value;
 };
 
 // 提交表单
 const handleSubmit = () => {
   // 表单验证
-  if (!formData.title) {
+  if (!formData.value.title) {
     uni.showToast({ title: "请输入美食名称", icon: "none" });
     return;
   }
-  if (!formData.shopName) {
+  if (!formData.value.shopName) {
     uni.showToast({ title: "请输入商家名称", icon: "none" });
     return;
   }
-  if (!formData.location) {
+  if (!formData.value.location) {
     uni.showToast({ title: "请选择店铺位置", icon: "none" });
     return;
   }
-  if (!formData.foodType) {
+  if (!formData.value.foodType) {
     uni.showToast({ title: "请选择食物类型", icon: "none" });
     return;
   }
-  if (!formData.description) {
+  if (!formData.value.description) {
     uni.showToast({ title: "请输入推荐理由", icon: "none" });
     return;
   }
-  if (formData.images.length === 0) {
+  if (formData.value.images.length === 0) {
     uni.showToast({ title: "请上传至少一张图片", icon: "none" });
     return;
   }
 
   // TODO: 提交表单数据
-  console.log("提交的表单数据：", formData);
-  uni.showToast({ title: "提交成功", icon: "success" });
+  console.log("提交的表单数据：", formData.value);
+
+  // 模拟提交成功
+  uni.showToast({
+    title: "提交成功",
+    icon: "success",
+    success: () => {
+      // 提交成功后重置表单
+      formData.value = {
+        title: "",
+        shopName: "",
+        location: "",
+        rating: 5,
+        foodType: "",
+        description: "",
+        images: [],
+      };
+    },
+  });
 };
 </script>
 
@@ -204,8 +221,8 @@ const handleSubmit = () => {
     padding-right: 8rpx;
 
     .rating-text {
-      margin-left: 8rpx;
-      font-size: 24rpx;
+      margin-left: 12rpx;
+      font-size: 32rpx;
       color: #ffc600;
       min-width: 32rpx;
     }
