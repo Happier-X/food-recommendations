@@ -4,41 +4,44 @@
     <wd-navbar
       fixed
       placeholder
+      safeAreaInsetTop
       title="编辑资料"
       left-arrow
       @click-left="handleBack"
-    >
-      <template #right>
-        <text class="save-btn" @click="handleSave">保存</text>
-      </template>
-    </wd-navbar>
+    ></wd-navbar>
 
     <!-- 编辑区域 -->
     <view class="edit-content">
       <!-- 头像 -->
-      <view class="edit-item" @click="handleChangeAvatar">
+      <view class="edit-item">
         <text class="label">头像</text>
         <view class="avatar-wrapper">
-          <image :src="userInfo.avatar" class="avatar" mode="aspectFill" />
-          <wd-icon name="arrow-right" size="16" class="arrow-icon" />
+          <wd-upload
+            v-model="userInfo.avatar"
+            :max-count="1"
+            :before-read="handleBeforeRead"
+            @success="handleUploadSuccess"
+            @fail="handleUploadFail"
+          >
+            <image :src="userInfo.avatar" class="avatar" mode="aspectFill" />
+          </wd-upload>
         </view>
       </view>
 
       <!-- 用户名 -->
       <view class="edit-item">
-        <text class="label">用户名</text>
-        <input
-          type="text"
+        <wd-input
           v-model="userInfo.username"
-          class="input"
+          label="用户名"
+          label-width="140rpx"
           placeholder="请输入用户名"
-          placeholder-class="placeholder"
+          clearable
         />
       </view>
 
       <!-- 食物类型 -->
       <view class="edit-item food-type">
-        <text class="label">食物类型</text>
+        <text class="label">饮食喜好</text>
         <view class="food-type-list">
           <view
             v-for="item in foodTypes"
@@ -51,6 +54,11 @@
           </view>
         </view>
       </view>
+    </view>
+
+    <!-- 底部保存按钮 -->
+    <view class="bottom-button">
+      <wd-button type="primary" block @click="handleSave">保存</wd-button>
     </view>
   </view>
 </template>
@@ -99,21 +107,32 @@ const toggleFoodType = (value) => {
   }
 };
 
-// 更换头像
-const handleChangeAvatar = () => {
-  uni.chooseImage({
-    count: 1,
-    sizeType: ["compressed"],
-    sourceType: ["album", "camera"],
-    success: (res) => {
-      userInfo.value.avatar = res.tempFilePaths[0];
-    },
-    fail: () => {
-      uni.showToast({
-        title: "选择图片失败",
-        icon: "none",
-      });
-    },
+// 上传前处理
+const handleBeforeRead = (file) => {
+  const isImage = file.type.includes("image");
+  if (!isImage) {
+    uni.showToast({
+      title: "请选择图片文件",
+      icon: "none",
+    });
+  }
+  return isImage;
+};
+
+// 上传成功
+const handleUploadSuccess = (res) => {
+  userInfo.value.avatar = res.tempFilePaths[0];
+  uni.showToast({
+    title: "上传成功",
+    icon: "success",
+  });
+};
+
+// 上传失败
+const handleUploadFail = () => {
+  uni.showToast({
+    title: "上传失败",
+    icon: "none",
   });
 };
 
@@ -142,16 +161,7 @@ const handleSave = () => {
 .edit-info {
   min-height: 100vh;
   background-color: #f8f8f8;
-}
-
-.save-btn {
-  font-size: 28rpx;
-  color: #ffc600;
-  padding: 20rpx;
-
-  &:active {
-    opacity: 0.7;
-  }
+  position: relative;
 }
 
 .edit-content {
@@ -230,5 +240,10 @@ const handleSave = () => {
       }
     }
   }
+}
+
+.bottom-button {
+  margin: 48rpx 40rpx;
+  margin-bottom: calc(48rpx + env(safe-area-inset-bottom));
 }
 </style>
