@@ -94,7 +94,7 @@ const handleService = (type) => {
       uni.navigateTo({ url: "/pages/user/myRecommend/index" });
       break;
     case "favorite":
-      uni.showToast({ title: "收藏", icon: "none" });
+      uni.navigateTo({ url: "/pages/user/myCollection/index" });
       break;
     case "contact":
       uni.showToast({ title: "联系客服", icon: "none" });

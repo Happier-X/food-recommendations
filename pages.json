@@ -48,6 +48,12 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/user/myCollection/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {
