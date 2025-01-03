@@ -78,11 +78,14 @@
         </view>
       </view>
     </view>
+    <wd-message-box></wd-message-box>
   </view>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useMessage } from "@/uni_modules/wot-design-uni";
+
+const message = useMessage();
 
 // 处理服务点击
 const handleService = (type) => {
@@ -97,27 +100,35 @@ const handleService = (type) => {
       uni.navigateTo({ url: "/pages/user/myCollection/index" });
       break;
     case "contact":
-      uni.showToast({ title: "联系客服", icon: "none" });
+      message.alert({
+        title: "联系客服",
+        msg: "客服电话：400-123-4567\n工作时间：周一至周五 9:00-18:00",
+      });
       break;
     case "about":
-      uni.showToast({ title: "关于我们", icon: "none" });
+      uni.navigateTo({ url: "/pages/user/about/index" });
       break;
     case "logout":
-      uni.showModal({
-        title: "提示",
-        content: "确定要退出登录吗？",
-        success: (res) => {
-          if (res.confirm) {
-            uni.showToast({
-              title: "退出成功",
-              icon: "success",
-              success: () => {
-                // TODO: 处理退出逻辑
-              },
-            });
-          }
-        },
-      });
+      message
+        .confirm({
+          title: "提示",
+          msg: "确定要退出登录吗？",
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        })
+        .then(() => {
+          uni.showToast({
+            title: "退出成功",
+            icon: "success",
+            success: () => {
+              // TODO: 处理退出逻辑
+              uni.navigateTo({ url: "/pages/auth/index" });
+            },
+          });
+        })
+        .catch(() => {
+          // 取消退出，不做任何操作
+        });
       break;
   }
 };
