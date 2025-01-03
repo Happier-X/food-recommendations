@@ -42,10 +42,11 @@
           <text class="value">{{ foodInfo.shopName }}</text>
         </view>
 
-        <view class="info-item">
+        <view class="info-item" @click="handleOpenLocation">
           <wd-icon name="location" size="16" />
           <text class="label">店铺位置</text>
           <text class="value">{{ foodInfo.location }}</text>
+          <wd-icon name="arrow-right" size="16" class="arrow-icon" />
         </view>
 
         <view class="info-item">
@@ -66,11 +67,34 @@ const handleBack = () => {
   uni.navigateBack();
 };
 
+// 处理函数
+const handleOpenLocation = () => {
+  // 这里需要真实的经纬度数据
+  uni.openLocation({
+    latitude: 23.13171, // 天河区体育西路的大致纬度
+    longitude: 113.32452, // 天河区体育西路的大致经度
+    name: foodInfo.value.shopName,
+    address: foodInfo.value.location,
+    success: () => {
+      console.log("打开地图成功");
+    },
+    fail: (err) => {
+      uni.showToast({
+        title: "打开地图失败",
+        icon: "none",
+      });
+      console.error("打开地图失败:", err);
+    },
+  });
+};
+
 // 模拟数据
 const foodInfo = ref({
   title: "香辣小龙虾",
   shopName: "蒜香小龙虾",
   location: "广州市天河区体育西路100号",
+  latitude: 23.13171,
+  longitude: 113.32452,
   rating: 4.8,
   foodType: "小龙虾",
   description:
@@ -92,6 +116,13 @@ const foodInfo = ref({
 </script>
 
 <style lang="scss" scoped>
+// 添加文本溢出省略号的 mixin
+@mixin text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .details-container {
   min-height: 100vh;
   background-color: #f8f8f8;
@@ -119,6 +150,7 @@ const foodInfo = ref({
     align-items: flex-start;
 
     .title {
+      @include text-ellipsis;
       font-size: 44rpx;
       font-weight: 600;
       color: #333;
@@ -198,9 +230,22 @@ const foodInfo = ref({
     }
 
     .value {
+      @include text-ellipsis;
       font-size: 28rpx;
       color: #333;
       flex: 1;
+    }
+
+    // 添加指示箭头样式
+    .arrow-icon {
+      font-size: 32rpx;
+      color: #999;
+      margin-left: 8rpx;
+    }
+
+    // 添加点击效果
+    &:active {
+      opacity: 0.7;
     }
   }
 }
