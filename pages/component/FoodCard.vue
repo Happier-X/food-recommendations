@@ -1,5 +1,5 @@
 <template>
-  <view class="food-card" @click="$emit('click', item)">
+  <view class="food-card" @click="handleClickCard">
     <image :src="item.image" mode="widthFix" class="food-image" />
     <view class="card-content">
       <text class="title">{{ item.title }}</text>
@@ -17,11 +17,12 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   item: {
     type: Object,
     required: true,
     default: () => ({
+      id: "",
       title: "",
       image: "",
       avatar: "",
@@ -30,8 +31,11 @@ defineProps({
     }),
   },
 });
-
-defineEmits(["click"]);
+const handleClickCard = () => {
+  uni.navigateTo({
+    url: `/pages/details/index?id=${props.item.id}`,
+  });
+};
 </script>
 
 <style lang="scss" scoped>
