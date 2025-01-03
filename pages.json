@@ -36,6 +36,12 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/user/editInfo/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {

@@ -88,7 +88,7 @@ import { ref } from "vue";
 const handleService = (type) => {
   switch (type) {
     case "edit":
-      uni.showToast({ title: "编辑资料", icon: "none" });
+      uni.navigateTo({ url: "/pages/user/editInfo/index" });
       break;
     case "recommend":
       uni.showToast({ title: "我的推荐", icon: "none" });
