@@ -87,7 +87,7 @@
 
       <!-- 提交按钮 -->
       <view class="submit-box">
-        <wd-button type="warning" block @click="handleSubmit">提交</wd-button>
+        <wd-button type="primary" block @click="handleSubmit">提交</wd-button>
       </view>
     </view>
   </view>
