@@ -19,7 +19,7 @@
         :column-gap="30"
       >
         <template #item="{ item }">
-          <FoodCard :item="item" @click="handleItemClick" />
+          <FoodCard :item="item" />
         </template>
       </WaterfallFlow>
 

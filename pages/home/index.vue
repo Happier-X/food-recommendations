@@ -3,14 +3,9 @@
     <wd-navbar fixed placeholder title="美食推荐" safeAreaInsetTop></wd-navbar>
 
     <view class="content">
-      <WaterfallFlow
-        :list="list"
-        :column-count="2"
-        :column-gap="30"
-        @itemClick="handleItemClick"
-      >
+      <WaterfallFlow :list="list" :column-count="2" :column-gap="30">
         <template #item="{ item }">
-          <FoodCard :item="item" @click="handleItemClick" />
+          <FoodCard :item="item" />
         </template>
       </WaterfallFlow>
     </view>
