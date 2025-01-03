@@ -119,11 +119,31 @@
         </view>
       </view>
     </view>
+
+    <!-- 悬浮按钮 -->
+    <wd-fab v-if="showActions">
+      <wd-button
+        @click="handleEdit"
+        custom-class="custom-button"
+        type="primary"
+        round
+      >
+        <wd-icon name="edit" size="22px"></wd-icon>
+      </wd-button>
+      <wd-button
+        @click="handleDelete"
+        custom-class="custom-button"
+        type="warning"
+        round
+      >
+        <wd-icon name="delete1" size="22px"></wd-icon>
+      </wd-button>
+    </wd-fab>
   </view>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 // 返回上一页
 const handleBack = () => {
@@ -236,6 +256,38 @@ const ratingBars = computed(() => {
     percentage: total ? Math.round((count / total) * 100) : 0,
   }));
 });
+
+// 是否显示操作按钮
+const showActions = ref(true);
+
+// 编辑推荐
+const handleEdit = () => {
+  uni.switchTab({
+    url: `/pages/recommend/index?type=edit`,
+  });
+};
+
+// 删除推荐
+const handleDelete = () => {
+  uni.showModal({
+    title: "提示",
+    content: "确定要删除这条推荐吗？",
+    success: (res) => {
+      if (res.confirm) {
+        // TODO: 调用删除接口
+        uni.showToast({
+          title: "删除成功",
+          icon: "success",
+          success: () => {
+            setTimeout(() => {
+              uni.navigateBack();
+            }, 1500);
+          },
+        });
+      }
+    },
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -514,5 +566,13 @@ const ratingBars = computed(() => {
     background: #f5f5f5;
     margin: 32rpx 0;
   }
+}
+:deep(.custom-button) {
+  min-width: auto !important;
+  box-sizing: border-box;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 16px !important;
+  margin: 8rpx;
 }
 </style>
