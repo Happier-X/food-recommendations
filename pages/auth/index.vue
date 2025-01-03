@@ -135,6 +135,9 @@ const registerForm = ref({
 
 // 统一的提交处理函数
 const handleSubmit = () => {
+   uni.switchTab({
+      url: "/pages/home/index",
+    });
   if (activeTab.value === 0) {
     // 登录逻辑
     if (!loginForm.value.username || !loginForm.value.password) {
