@@ -9,8 +9,8 @@
     />
   </view>
   <wd-tabs v-model="tab" slidable="always">
-    <block v-for="item in categoryList" :key="item.id">
-      <wd-tab :title="`${item.name}`" style="padding: 0 20rpx">
+    <block v-for="item in categoryList" :key="item.value">
+      <wd-tab :title="`${item.label}`" style="padding: 0 20rpx">
         <WaterfallFlow :list="list" :column-count="2" :column-gap="30">
           <template #item="{ item }">
             <FoodCard :item="item" @click="handleItemClick" />
@@ -26,42 +26,20 @@ import WaterfallFlow from "../component/WaterfallFlow.vue";
 import FoodCard from "../component/FoodCard.vue";
 const tab = ref("全部");
 const categoryList = ref([
-  {
-    id: "1",
-    name: "全部",
-  },
-  {
-    id: "2",
-    name: "卤菜",
-  },
-  {
-    id: "3",
-    name: "粤菜",
-  },
-  {
-    id: "4",
-    name: "东北菜",
-  },
-  {
-    id: "5",
-    name: "川菜",
-  },
-  {
-    id: "2",
-    name: "卤菜",
-  },
-  {
-    id: "3",
-    name: "粤菜",
-  },
-  {
-    id: "4",
-    name: "东北菜",
-  },
-  {
-    id: "5",
-    name: "川菜",
-  },
+  { value: 0, label: "全部" },
+  { value: 1, label: "饺子馄饨" },
+  { value: 2, label: "火锅烤肉" },
+  { value: 3, label: "包子粥面" },
+  { value: 4, label: "快餐便当" },
+  { value: 5, label: "汉堡薯条" },
+  { value: 6, label: "意面披萨" },
+  { value: 7, label: "川湘菜" },
+  { value: 8, label: "地方菜系" },
+  { value: 9, label: "炸鸡炸串" },
+  { value: 10, label: "特色小吃" },
+  { value: 11, label: "西餐" },
+  { value: 12, label: "日料寿司" },
+  { value: 13, label: "韩式料理" },
 ]);
 const list = ref([
   {
