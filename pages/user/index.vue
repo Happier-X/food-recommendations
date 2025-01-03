@@ -15,17 +15,16 @@
         <text class="username">admin</text>
         <view class="stats-row">
           <view class="stat-item">
-            <text class="num">56</text>
-            <text class="label">收藏</text>
-          </view>
-          <view class="stat-item">
             <text class="num">12</text>
             <text class="label">推荐</text>
+          </view>
+          <view class="stat-item">
+            <text class="num">56</text>
+            <text class="label">收藏</text>
           </view>
         </view>
       </view>
     </view>
-
     <!-- 服务功能区域 -->
     <view class="service-section">
       <view class="section-title">服务功能</view>
@@ -38,18 +37,10 @@
           <text class="label">编辑资料</text>
         </view>
 
-        <!-- 商家食品 -->
-        <view class="grid-item" @click="handleService('food')">
-          <view class="icon-box">
-            <wd-icon name="shop" size="24" />
-          </view>
-          <text class="label">商家食品</text>
-        </view>
-
         <!-- 我的推荐 -->
         <view class="grid-item" @click="handleService('recommend')">
           <view class="icon-box">
-            <wd-icon name="star" size="24" />
+            <wd-icon name="thumb-up" size="24" />
           </view>
           <text class="label">我的推荐</text>
         </view>
@@ -57,9 +48,9 @@
         <!-- 收藏 -->
         <view class="grid-item" @click="handleService('favorite')">
           <view class="icon-box">
-            <wd-icon name="collect" size="24" />
+            <wd-icon name="star" size="24" />
           </view>
-          <text class="label">收藏</text>
+          <text class="label">我的收藏</text>
         </view>
 
         <!-- 联系客服 -->
@@ -73,7 +64,7 @@
         <!-- 关于我们 -->
         <view class="grid-item" @click="handleService('about')">
           <view class="icon-box">
-            <wd-icon name="info" size="24" />
+            <wd-icon name="info-circle" size="24" />
           </view>
           <text class="label">关于我们</text>
         </view>
@@ -81,9 +72,9 @@
         <!-- 退出 -->
         <view class="grid-item" @click="handleService('logout')">
           <view class="icon-box">
-            <wd-icon name="exit" size="24" />
+            <wd-icon name="logout" size="24" />
           </view>
-          <text class="label">退出</text>
+          <text class="label">退出登录</text>
         </view>
       </view>
     </view>
@@ -98,9 +89,6 @@ const handleService = (type) => {
   switch (type) {
     case "edit":
       uni.showToast({ title: "编辑资料", icon: "none" });
-      break;
-    case "food":
-      uni.showToast({ title: "商家食品", icon: "none" });
       break;
     case "recommend":
       uni.showToast({ title: "我的推荐", icon: "none" });
@@ -295,13 +283,13 @@ const handleService = (type) => {
     font-size: 32rpx;
     font-weight: 500;
     color: #333;
-    margin-bottom: 24rpx;
+    margin-bottom: 32rpx;
   }
 
   .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32rpx 16rpx;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40rpx 24rpx;
   }
 
   .grid-item {
@@ -310,23 +298,30 @@ const handleService = (type) => {
     align-items: center;
 
     .icon-box {
-      width: 80rpx;
-      height: 80rpx;
+      width: 96rpx;
+      height: 96rpx;
       background-color: #fff5e6;
-      border-radius: 40rpx;
+      border-radius: 48rpx;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 12rpx;
+      margin-bottom: 16rpx;
+      transition: transform 0.2s ease;
+
+      &:active {
+        transform: scale(0.95);
+      }
 
       :deep(.wd-icon) {
         color: #ffc600;
+        font-size: 48rpx;
       }
     }
 
     .label {
-      font-size: 24rpx;
-      color: #666;
+      font-size: 26rpx;
+      color: #333;
+      font-weight: 500;
     }
   }
 }
