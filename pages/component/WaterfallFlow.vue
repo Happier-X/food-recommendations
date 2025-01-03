@@ -5,24 +5,8 @@
       v-for="(column, columnIndex) in columns"
       :key="columnIndex"
     >
-      <view
-        class="waterfall-item"
-        v-for="(item, index) in column"
-        :key="index"
-        @click="handleItemClick(item)"
-      >
-        <slot name="item" :item="item">
-          <!-- 默认内容插槽 -->
-          <image
-            :src="item.image"
-            mode="widthFix"
-            @load="onImageLoad(columnIndex, index)"
-          />
-          <view class="item-content">
-            <text class="title">{{ item.title }}</text>
-            <text class="desc">{{ item.description }}</text>
-          </view>
-        </slot>
+      <view class="waterfall-item" v-for="(item, index) in column" :key="index">
+        <slot name="item" :item="item"></slot>
       </view>
     </view>
   </view>
@@ -37,28 +21,26 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  // 列数
+  // 瀑布流列数
   columnCount: {
     type: Number,
     default: 2,
   },
-  // 列间距
+  // 列间距（单位：rpx）
   columnGap: {
     type: Number,
     default: 10,
   },
 });
 
-const emit = defineEmits(["itemClick"]);
-
-// 分列数据
+// 分列数据：按列数初始化空数组
 const columns = ref(
   Array(props.columnCount)
     .fill()
     .map(() => [])
 );
 
-// 监听数据变化重新布局
+// 监听数据变化时重新布局
 watch(
   () => props.list,
   () => {
@@ -67,9 +49,9 @@ watch(
   { deep: true }
 );
 
-// 初始化布局
+// 初始化瀑布流布局
 const initLayout = () => {
-  // 清空原有数据
+  // 重置列数据
   columns.value = Array(props.columnCount)
     .fill()
     .map(() => []);
@@ -81,16 +63,7 @@ const initLayout = () => {
   });
 };
 
-// 图片加载完成
-const onImageLoad = (columnIndex, index) => {
-  // 可以在这里处理图片加载完成后的逻辑
-};
-
-// 点击事件
-const handleItemClick = (item) => {
-  emit("itemClick", item);
-};
-
+// 组件挂载时初始化布局
 onMounted(() => {
   initLayout();
 });
@@ -101,7 +74,7 @@ onMounted(() => {
   display: flex;
   padding: 10rpx;
   box-sizing: border-box;
-  gap: v-bind("`${columnGap}rpx`");
+  gap: v-bind("`${props.columnGap}rpx`");
 
   .waterfall-column {
     flex: 1;
@@ -117,37 +90,6 @@ onMounted(() => {
       &:hover {
         transform: translateY(-2rpx);
         box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
-      }
-
-      image {
-        width: 100%;
-        height: auto;
-        vertical-align: middle;
-        background-color: #f5f5f5;
-      }
-
-      .item-content {
-        padding: 16rpx;
-
-        .title {
-          font-size: 28rpx;
-          font-weight: 500;
-          color: #333;
-          margin-bottom: 8rpx;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          overflow: hidden;
-        }
-
-        .desc {
-          font-size: 24rpx;
-          color: #666;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          overflow: hidden;
-        }
       }
     }
   }
