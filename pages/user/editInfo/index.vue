@@ -181,6 +181,7 @@ const handleSave = () => {
     color: #333;
     width: 140rpx;
     flex-shrink: 0;
+    margin-left: 30rpx;
   }
 
   .avatar-wrapper {
@@ -201,21 +202,19 @@ const handleSave = () => {
     }
   }
 
-  .input {
-    flex: 1;
-    font-size: 28rpx;
-    color: #333;
+  :deep(.uni-input-input) {
     text-align: right;
   }
 
-  .placeholder {
-    color: #999;
+  :deep(.uni-input-placeholder) {
+    text-align: right;
   }
 
   &.food-type {
     display: block;
 
     .food-type-list {
+      margin-left: 30rpx;
       margin-top: 24rpx;
       display: flex;
       flex-wrap: wrap;
