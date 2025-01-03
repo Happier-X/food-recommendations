@@ -21,8 +21,17 @@
       <view class="info-section">
         <view class="title-row">
           <text class="title">{{ foodInfo.title }}</text>
-          <view class="rating">
-            <text class="rating-text">{{ foodInfo.rating.toFixed(1) }}</text>
+          <view class="right-actions">
+            <view class="rating">
+              <text class="rating-text">{{ foodInfo.rating.toFixed(1) }}</text>
+            </view>
+            <view class="collect-btn" @click.stop="handleCollect">
+              <wd-icon
+                :name="isCollected ? 'star-filled' : 'star'"
+                size="20"
+                :color="isCollected ? '#ffc600' : '#999'"
+              />
+            </view>
           </view>
         </view>
 
@@ -113,6 +122,16 @@ const foodInfo = ref({
     recommendTime: "2024-01-20 18:30",
   },
 });
+
+const isCollected = ref(false);
+
+const handleCollect = () => {
+  isCollected.value = !isCollected.value;
+  uni.showToast({
+    title: isCollected.value ? "收藏成功" : "取消收藏",
+    icon: "none",
+  });
+};
 </script>
 
 <style lang="scss" scoped>
@@ -159,17 +178,31 @@ const foodInfo = ref({
       margin-right: 24rpx;
     }
 
-    .rating {
-      display: inline-block;
-      background: rgba(255, 198, 0, 0.1);
-      padding: 4rpx 20rpx;
-      border-radius: 6rpx;
+    .right-actions {
+      display: flex;
+      align-items: center;
+      gap: 24rpx;
       flex-shrink: 0;
 
-      .rating-text {
-        font-size: 28rpx;
-        color: #ffc600;
-        font-weight: 600;
+      .rating {
+        display: inline-block;
+        background: rgba(255, 198, 0, 0.1);
+        padding: 4rpx 20rpx;
+        border-radius: 6rpx;
+
+        .rating-text {
+          font-size: 28rpx;
+          color: #ffc600;
+          font-weight: 600;
+        }
+      }
+
+      .collect-btn {
+        padding: 8rpx;
+
+        &:active {
+          opacity: 0.7;
+        }
       }
     }
   }
