@@ -211,11 +211,11 @@ const handleSave = () => {
   }
 
   &.food-type {
-    display: block;
+    display: flex;
+    align-items: flex-start;
 
     .food-type-list {
       margin-left: 30rpx;
-      margin-top: 24rpx;
       display: flex;
       flex-wrap: wrap;
       gap: 20rpx;
