@@ -139,11 +139,13 @@
         <wd-icon name="delete1" size="22px"></wd-icon>
       </wd-button>
     </wd-fab>
+    <wd-message-box />
   </view>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
+import { useMessage } from "@/uni_modules/wot-design-uni";
 
 // 返回上一页
 const handleBack = () => {
@@ -267,26 +269,31 @@ const handleEdit = () => {
   });
 };
 
+// 消息
+const message = useMessage();
+
 // 删除推荐
 const handleDelete = () => {
-  uni.showModal({
-    title: "提示",
-    content: "确定要删除这条推荐吗？",
-    success: (res) => {
-      if (res.confirm) {
-        // TODO: 调用删除接口
-        uni.showToast({
-          title: "删除成功",
-          icon: "success",
-          success: () => {
-            setTimeout(() => {
-              uni.navigateBack();
-            }, 1500);
-          },
-        });
-      }
-    },
-  });
+  message
+    .confirm({
+      title: "提示",
+      msg: "确定要删除这条推荐吗？",
+    })
+    .then(() => {
+      console.log("删除成功");
+      uni.showToast({
+        title: "删除成功",
+        icon: "success",
+        success: () => {
+          setTimeout(() => {
+            uni.navigateBack();
+          }, 1500);
+        },
+      });
+    })
+    .catch(() => {
+      console.log("取消删除");
+    });
 };
 </script>
 
