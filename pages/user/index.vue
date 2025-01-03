@@ -91,7 +91,7 @@ const handleService = (type) => {
       uni.navigateTo({ url: "/pages/user/editInfo/index" });
       break;
     case "recommend":
-      uni.showToast({ title: "我的推荐", icon: "none" });
+      uni.navigateTo({ url: "/pages/user/myRecommend/index" });
       break;
     case "favorite":
       uni.showToast({ title: "收藏", icon: "none" });
