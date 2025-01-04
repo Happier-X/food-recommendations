@@ -26,14 +26,20 @@ onMounted(() => {
   uni.getLocation({
     type: 'gcj02',
     success: (res) => {
-      // 使用逆地理编码获取位置信息
+      // 使用高德地图逆地理编码
       uni.request({
-        url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${res.latitude},${res.longitude}&key=YOUR_KEY`,
+        url: 'https://restapi.amap.com/v3/geocode/regeo',
+        data: {
+          key: '7e96a646059704d70e2c16243ee2b1d4',
+          location: `${res.longitude},${res.latitude}`,
+          extensions: 'base',
+          batch: false
+        },
         success: (result) => {
-          console.log(result)
-          if (result.data.status === 0) {
-            const address = result.data.result.address_component;
-            locationTitle.value = `${address.district || '附近'}`;
+          console.log('高德地图返回：', result);
+          if (result.data.status === '1') {
+            const addressComponent = result.data.regeocode.addressComponent;
+            locationTitle.value = addressComponent.district || '附近';
           }
         },
         fail: () => {

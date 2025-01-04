@@ -131,10 +131,42 @@ const handleChooseLocation = () => {
   uni.chooseLocation({
     success: (res) => {
       console.log('选择位置成功：', res);
-      // 这里可以根据新的位置刷新附近的美食列表
-      uni.showToast({
-        title: '位置已更新',
-        icon: 'success'
+      // 使用高德地图搜索周边
+      uni.request({
+        url: 'https://restapi.amap.com/v3/place/around',
+        data: {
+          key: '你的高德Key',
+          location: `${res.longitude},${res.latitude}`,
+          keywords: '美食',
+          types: '050000',  // 餐饮服务类POI
+          radius: 3000,     // 搜索半径，单位：米
+          offset: 20,       // 每页记录数据
+          page: 1          // 当前页数
+        },
+        success: (result) => {
+          console.log('周边美食：', result);
+          if (result.data.status === '1') {
+            // 更新列表数据
+            list.value = result.data.pois.map(poi => ({
+              title: poi.name,
+              image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3', // 需要替换为实际图片
+              avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&w=50&h=50', // 需要替换为实际头像
+              username: poi.type.split(';')[0],
+              rating: (Math.random() * (5 - 4) + 4).toFixed(1), // 示例评分
+            }));
+          }
+          uni.showToast({
+            title: '位置已更新',
+            icon: 'success'
+          });
+        },
+        fail: (err) => {
+          console.error('搜索周边失败：', err);
+          uni.showToast({
+            title: '获取周边信息失败',
+            icon: 'error'
+          });
+        }
       });
     },
     fail: (err) => {

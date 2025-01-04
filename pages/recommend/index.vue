@@ -128,6 +128,9 @@ const chooseLocation = () => {
   uni.chooseLocation({
     success: (res) => {
       formData.value.location = res.address;
+      // 保存经纬度信息
+      formData.value.latitude = res.latitude;
+      formData.value.longitude = res.longitude;
     },
     fail: () => {
       uni.showToast({
