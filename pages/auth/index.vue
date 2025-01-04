@@ -1,5 +1,6 @@
 <template>
   <view class="auth-container">
+    <wd-navbar fixed placeholder title="登录/注册" safeAreaInsetTop></wd-navbar>
     <view class="auth-page">
       <!-- Logo区域 -->
       <view class="logo-box">
