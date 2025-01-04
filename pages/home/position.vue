@@ -5,6 +5,20 @@
         <FoodCard :item="item" />
       </template>
     </WaterfallFlow>
+
+    <!-- 使用wd-fab的trigger插槽 -->
+    <wd-fab :show-action="false">
+      <template #trigger>
+        <wd-button
+          @click="handleChooseLocation"
+          custom-class="custom-button"
+          type="primary"
+          round
+        >
+          <wd-icon name="location" size="22px"></wd-icon>
+        </wd-button>
+      </template>
+    </wd-fab>
   </view>
 </template>
 
@@ -111,10 +125,44 @@ const handleItemClick = (item) => {
     url: "/pages/detail/index",
   });
 };
+
+// 处理选择位置
+const handleChooseLocation = () => {
+  uni.chooseLocation({
+    success: (res) => {
+      console.log('选择位置成功：', res);
+      // 这里可以根据新的位置刷新附近的美食列表
+      uni.showToast({
+        title: '位置已更新',
+        icon: 'success'
+      });
+    },
+    fail: (err) => {
+      console.error('选择位置失败：', err);
+      uni.showToast({
+        title: '选择位置失败',
+        icon: 'error'
+      });
+    }
+  });
+};
 </script>
 
 <style lang="scss" scoped>
 .content {
   padding: 20rpx;
+}
+
+:deep(.custom-button) {
+  min-width: auto !important;
+  box-sizing: border-box;
+  width: 96rpx !important;
+  height: 96rpx !important;
+  border-radius: 48rpx !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
 }
 </style>
