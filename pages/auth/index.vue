@@ -12,8 +12,7 @@
       <wd-card class="form-card">
         <wd-tabs v-model="activeTab" class="auth-tabs">
           <wd-tab title="登录">
-            <view class="form">
-              <view class="role-box" style="opacity: 0">
+              <view style="opacity: 0;display:flex;justify-content: center;gap:40rpx;margin:20rpx 0;">
                 <wd-radio-group shape="button">
                   <wd-radio value="personal">个人用户</wd-radio>
                   <wd-radio value="business">商家用户</wd-radio>
@@ -41,7 +40,7 @@
                   type="password"
                 />
               </view>
-              <view class="form-item" v-show="false">
+              <view class="form-item" style="opacity: 0;">
                 <wd-input
                   label="确认密码"
                   label-width="25%"
@@ -53,12 +52,10 @@
                   clearable
                 />
               </view>
-            </view>
           </wd-tab>
 
           <wd-tab title="注册">
-            <view class="form">
-              <view class="role-box">
+              <view style="display:flex;justify-content: center;gap:40rpx;margin:20rpx 0;">
                 <wd-radio-group v-model="registerForm.role" shape="button">
                   <wd-radio value="personal">个人用户</wd-radio>
                   <wd-radio value="business">商家用户</wd-radio>
@@ -98,7 +95,6 @@
                   clearable
                 />
               </view>
-            </view>
           </wd-tab>
         </wd-tabs>
 
@@ -242,17 +238,8 @@ const handleSubmit = () => {
   .auth-tabs {
     height: 35vh;
     width: 100%;
-
-    .form {
       .form-item {
         margin-bottom: 20rpx;
-      }
-      .role-box {
-        margin: 20rpx 0;
-        display: flex;
-        justify-content: center;
-        gap: 40rpx;
-      }
     }
   }
 }
