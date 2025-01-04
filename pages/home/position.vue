@@ -1,31 +1,22 @@
 <template>
-  <view class="content">
+  <view class="position-content">
     <WaterfallFlow :list="list" :column-count="2" :column-gap="30">
       <template #item="{ item }">
         <FoodCard :item="item" />
       </template>
     </WaterfallFlow>
 
-    <!-- 使用wd-fab的trigger插槽 -->
-    <wd-fab :show-action="false">
-      <template #trigger>
-        <wd-button
-          @click="handleChooseLocation"
-          custom-class="custom-button"
-          type="primary"
-          round
-        >
-          <wd-icon name="location" size="22px"></wd-icon>
-        </wd-button>
-      </template>
-    </wd-fab>
+    <wd-fab :expandable="false" inactiveIcon="location" @click="handleChooseLocation"></wd-fab>
+
   </view>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
 import FoodCard from "../component/FoodCard.vue";
+
+const emit = defineEmits(['update-location']);
 
 const list = ref([
   {
@@ -120,12 +111,6 @@ const list = ref([
   },
 ]);
 
-const handleItemClick = (item) => {
-  uni.navigateTo({
-    url: "/pages/detail/index",
-  });
-};
-
 // 处理选择位置
 const handleChooseLocation = () => {
   uni.chooseLocation({
@@ -135,13 +120,13 @@ const handleChooseLocation = () => {
       uni.request({
         url: 'https://restapi.amap.com/v3/place/around',
         data: {
-          key: '你的高德Key',
+          key: '7e96a646059704d70e2c16243ee2b1d4',
           location: `${res.longitude},${res.latitude}`,
           keywords: '美食',
-          types: '050000',  // 餐饮服务类POI
-          radius: 3000,     // 搜索半径，单位：米
-          offset: 20,       // 每页记录数据
-          page: 1          // 当前页数
+          types: '050000',
+          radius: 3000,
+          offset: 20,
+          page: 1
         },
         success: (result) => {
           console.log('周边美食：', result);
@@ -149,11 +134,28 @@ const handleChooseLocation = () => {
             // 更新列表数据
             list.value = result.data.pois.map(poi => ({
               title: poi.name,
-              image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3', // 需要替换为实际图片
-              avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&w=50&h=50', // 需要替换为实际头像
+              image: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3',
+              avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&w=50&h=50',
               username: poi.type.split(';')[0],
-              rating: (Math.random() * (5 - 4) + 4).toFixed(1), // 示例评分
+              rating: (Math.random() * (5 - 4) + 4).toFixed(1),
             }));
+
+            // 获取地址信息并发送给父组件
+            uni.request({
+              url: 'https://restapi.amap.com/v3/geocode/regeo',
+              data: {
+                key: '7e96a646059704d70e2c16243ee2b1d4',
+                location: `${res.longitude},${res.latitude}`,
+                extensions: 'base',
+                batch: false
+              },
+              success: (addressResult) => {
+                if (addressResult.data.status === '1') {
+                  const addressComponent = addressResult.data.regeocode.addressComponent;
+                  emit('update-location', addressComponent.district || '附近');
+                }
+              }
+            });
           }
           uni.showToast({
             title: '位置已更新',
@@ -181,20 +183,7 @@ const handleChooseLocation = () => {
 </script>
 
 <style lang="scss" scoped>
-.content {
+.position-content {
   padding: 20rpx;
-}
-
-:deep(.custom-button) {
-  min-width: auto !important;
-  box-sizing: border-box;
-  width: 96rpx !important;
-  height: 96rpx !important;
-  border-radius: 48rpx !important;
-  padding: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.15);
 }
 </style>

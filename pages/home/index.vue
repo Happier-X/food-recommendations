@@ -7,7 +7,7 @@
         <recommend />
       </wd-tab>
       <wd-tab :title="locationTitle">
-        <position />
+        <position @update-location="updateLocationTitle" />
       </wd-tab>
     </wd-tabs>
   </view>
@@ -20,6 +20,11 @@ import position from "./position.vue";
 
 const activeTab = ref(0);
 const locationTitle = ref('附近');
+
+// 更新位置标题
+const updateLocationTitle = (newLocation) => {
+  locationTitle.value = newLocation;
+};
 
 onMounted(() => {
   // 获取用户位置
