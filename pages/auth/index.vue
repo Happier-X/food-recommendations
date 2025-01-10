@@ -13,89 +13,104 @@
       <wd-card class="form-card">
         <wd-tabs v-model="activeTab" class="auth-tabs">
           <wd-tab title="登录">
-              <view style="opacity: 0;display:flex;justify-content: center;gap:40rpx;margin:20rpx 0;">
-                <wd-radio-group shape="button">
-                  <wd-radio value="personal">个人用户</wd-radio>
-                  <wd-radio value="business">商家用户</wd-radio>
-                </wd-radio-group>
-              </view>
-              <view class="form-item">
-                <wd-input
-                  label="用户名"
-                  label-width="25%"
-                  width="100%"
-                  v-model="loginForm.username"
-                  placeholder="请输入用户名"
-                  clearable
-                />
-              </view>
-              <view class="form-item">
-                <wd-input
-                  label="密码"
-                  label-width="25%"
-                  width="100%"
-                  v-model="loginForm.password"
-                  placeholder="请输入密码"
-                  clearable
-                  show-password
-                  type="password"
-                />
-              </view>
-              <view class="form-item" style="opacity: 0;">
-                <wd-input
-                  label="确认密码"
-                  label-width="25%"
-                  width="100%"
-                  v-model="registerForm.confirmPassword"
-                  placeholder="请再次输入密码"
-                  show-password
-                  type="password"
-                  clearable
-                />
-              </view>
+            <view
+              style="
+                opacity: 0;
+                display: flex;
+                justify-content: center;
+                gap: 40rpx;
+                margin: 20rpx 0;
+              "
+            >
+              <wd-radio-group shape="button">
+                <wd-radio value="personal">个人用户</wd-radio>
+                <wd-radio value="business">商家用户</wd-radio>
+              </wd-radio-group>
+            </view>
+            <view class="form-item">
+              <wd-input
+                label="用户名"
+                label-width="25%"
+                width="100%"
+                v-model="loginForm.username"
+                placeholder="请输入用户名"
+                clearable
+              />
+            </view>
+            <view class="form-item">
+              <wd-input
+                label="密码"
+                label-width="25%"
+                width="100%"
+                v-model="loginForm.password"
+                placeholder="请输入密码"
+                clearable
+                show-password
+                type="password"
+              />
+            </view>
+            <view class="form-item" style="opacity: 0">
+              <wd-input
+                label="确认密码"
+                label-width="25%"
+                width="100%"
+                v-model="registerForm.confirmPassword"
+                placeholder="请再次输入密码"
+                show-password
+                type="password"
+                clearable
+              />
+            </view>
           </wd-tab>
 
           <wd-tab title="注册">
-              <view style="display:flex;justify-content: center;gap:40rpx;margin:20rpx 0;">
-                <wd-radio-group v-model="registerForm.role" shape="button">
-                  <wd-radio value="personal">个人用户</wd-radio>
-                  <wd-radio value="business">商家用户</wd-radio>
-                </wd-radio-group>
-              </view>
-              <view class="form-item">
-                <wd-input
-                  label="用户名"
-                  label-width="25%"
-                  width="100%"
-                  v-model="registerForm.username"
-                  placeholder="请输入用户名"
-                  clearable
-                />
-              </view>
-              <view class="form-item">
-                <wd-input
-                  label="密码"
-                  label-width="25%"
-                  width="100%"
-                  v-model="registerForm.password"
-                  placeholder="请输入密码"
-                  show-password
-                  clearable
-                  type="password"
-                />
-              </view>
-              <view class="form-item">
-                <wd-input
-                  label="确认密码"
-                  label-width="25%"
-                  width="100%"
-                  v-model="registerForm.confirmPassword"
-                  placeholder="请再次输入密码"
-                  show-password
-                  type="password"
-                  clearable
-                />
-              </view>
+            <view
+              style="
+                display: flex;
+                justify-content: center;
+                gap: 40rpx;
+                margin: 20rpx 0;
+              "
+            >
+              <wd-radio-group v-model="registerForm.role" shape="button">
+                <wd-radio value="personal">个人用户</wd-radio>
+                <wd-radio value="business">商家用户</wd-radio>
+              </wd-radio-group>
+            </view>
+            <view class="form-item">
+              <wd-input
+                label="用户名"
+                label-width="25%"
+                width="100%"
+                v-model="registerForm.username"
+                placeholder="请输入用户名"
+                clearable
+              />
+            </view>
+            <view class="form-item">
+              <wd-input
+                label="密码"
+                label-width="25%"
+                width="100%"
+                v-model="registerForm.password"
+                placeholder="请输入密码"
+                show-password
+                clearable
+                type="password"
+              />
+            </view>
+            <view class="form-item">
+              <wd-input
+                label="确认密码"
+                label-width="25%"
+                width="100%"
+                v-model="registerForm.confirmPassword"
+                placeholder="请再次输入密码"
+                show-password
+                type="password"
+                clearable
+              />
+            </view>
           </wd-tab>
         </wd-tabs>
 
@@ -115,6 +130,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { post } from "@/utils/request";
 
 const activeTab = ref(0);
 
@@ -131,10 +147,7 @@ const registerForm = ref({
 });
 
 // 统一的提交处理函数
-const handleSubmit = () => {
-   uni.switchTab({
-      url: "/pages/home/index",
-    });
+const handleSubmit = async () => {
   if (activeTab.value === 0) {
     // 登录逻辑
     if (!loginForm.value.username || !loginForm.value.password) {
@@ -144,10 +157,32 @@ const handleSubmit = () => {
       });
       return;
     }
-    uni.switchTab({
-      url: "/pages/home/index",
-    });
-    console.log("登录表单:", loginForm.value);
+    try {
+      const res = await post({
+        url: "/auth/login",
+        data: {
+          name: loginForm.value.username,
+          password: loginForm.value.password,
+        },
+      });
+      console.log(res);
+      // if (res.code == 200) {
+      //   uni.setStorageSync("token", res.access_token);
+      //   uni.showToast({
+      //     title: "登录成功",
+      //     icon: "none",
+      //   });
+      //   uni.switchTab({
+      //     url: "/pages/home/index",
+      //   });
+      // }
+    } catch (error) {
+      console.log(error);
+      // uni.showToast({
+      //   title: "用户名或密码错误",
+      //   icon: "none",
+      // });
+    }
   } else {
     // 注册逻辑
     if (
@@ -239,8 +274,8 @@ const handleSubmit = () => {
   .auth-tabs {
     height: 35vh;
     width: 100%;
-      .form-item {
-        margin-bottom: 20rpx;
+    .form-item {
+      margin-bottom: 20rpx;
     }
   }
 }

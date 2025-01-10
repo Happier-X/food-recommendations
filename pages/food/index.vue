@@ -12,18 +12,27 @@
     <block v-for="item in categoryList" :key="item.value">
       <wd-tab :title="`${item.label}`" style="padding: 0 20rpx">
         <WaterfallFlow :list="list" :column-count="2" :column-gap="30">
-          <template #item="{ item }">
-            <FoodCard :item="item" @click="handleItemClick" />
-          </template>
         </WaterfallFlow>
       </wd-tab>
     </block>
   </wd-tabs>
+  <div>
+    <!-- 显示食物列表 -->
+    <div v-for="food in foodList" :key="food.id">
+      {{ food.name }}
+      <button @click="deleteFood(food.id)">删除</button>
+    </div>
+
+    <!-- 添加食物的表单 -->
+    <form @submit.prevent="handleSubmit">
+      <!-- 表单内容 -->
+    </form>
+  </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { get, post, del } from "@/utils/request";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
-import FoodCard from "../component/FoodCard.vue";
 const tab = ref("全部");
 const categoryList = ref([
   { value: 0, label: "全部" },
@@ -133,5 +142,49 @@ const list = ref([
     rating: 4.7,
   },
 ]);
+
+const foodList = ref([]);
+
+// 获取食物列表的方法
+const getFoodList = async () => {
+  try {
+    // token会通过拦截器自动添加到请求头中
+    const data = await get("/foods");
+    foodList.value = data;
+  } catch (error) {
+    console.error("获取食物列表失败:", error);
+    if (error.message === "token已过期，请重新登录") {
+      // 可以在这里处理token过期的特殊逻辑
+    }
+  }
+};
+
+// 修改添加食物的方法
+const addFood = async (foodData) => {
+  try {
+    const result = await post("/foods", foodData);
+    await getFoodList();
+    return result;
+  } catch (error) {
+    console.error("添加食物失败:", error);
+    throw error;
+  }
+};
+
+// 修改删除食物的方法
+const deleteFood = async (foodId) => {
+  try {
+    await del(`/foods/${foodId}`);
+    await getFoodList();
+  } catch (error) {
+    console.error("删除食物失败:", error);
+    throw error;
+  }
+};
+
+// 在组件挂载时获取食物列表
+onMounted(() => {
+  getFoodList();
+});
 </script>
 <style lang="scss" scoped></style>
