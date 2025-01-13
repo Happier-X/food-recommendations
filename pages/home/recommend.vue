@@ -1,9 +1,6 @@
 <template>
   <view class="content">
     <WaterfallFlow :list="list" :column-count="2" :column-gap="30">
-      <template #item="{ item }">
-        <FoodCard :item="item" />
-      </template>
     </WaterfallFlow>
   </view>
 </template>
@@ -11,7 +8,6 @@
 <script setup>
 import { ref } from "vue";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
-import FoodCard from "../component/FoodCard.vue";
 
 const list = ref([
   {

@@ -18,9 +18,6 @@
         :column-count="2"
         :column-gap="30"
       >
-        <template #item="{ item }">
-          <FoodCard :item="item" />
-        </template>
       </WaterfallFlow>
 
       <!-- 空状态 -->
@@ -35,7 +32,6 @@
 <script setup>
 import { ref } from "vue";
 import WaterfallFlow from "@/pages/component/WaterfallFlow.vue";
-import FoodCard from "@/pages/component/FoodCard.vue";
 
 // 推荐列表数据
 const recommendList = ref([
