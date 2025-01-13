@@ -165,23 +165,16 @@ const handleSubmit = async () => {
           password: loginForm.value.password,
         },
       });
-      console.log(res);
-      // if (res.code == 200) {
-      //   uni.setStorageSync("token", res.access_token);
-      //   uni.showToast({
-      //     title: "登录成功",
-      //     icon: "none",
-      //   });
-      //   uni.switchTab({
-      //     url: "/pages/home/index",
-      //   });
-      // }
+        uni.setStorageSync("token", res.access_token);
+        uni.showToast({
+          title: "登录成功",
+          icon: "none",
+        });
+        uni.switchTab({
+          url: "/pages/home/index",
+        });
     } catch (error) {
       console.log(error);
-      // uni.showToast({
-      //   title: "用户名或密码错误",
-      //   icon: "none",
-      // });
     }
   } else {
     // 注册逻辑
@@ -204,7 +197,22 @@ const handleSubmit = async () => {
       });
       return;
     }
-    console.log("注册表单:", registerForm.value);
+    try{
+const res = await post({
+  url:"/auth/register",
+  data:{
+    name:registerForm.value.username,
+    role:registerForm.value.role === 'personal' ? 0 : 1,
+    password:registerForm.value.password
+  }
+})
+uni.showToast({
+  title:'注册成功',
+  icon:'none'
+})
+    }catch(err){
+console.log(err)
+    }
   }
 };
 </script>
