@@ -1,4 +1,4 @@
-import { get, del, post } from "../utils/request";
+import { get, del, post, patch } from "../utils/request";
 
 export function createFood(data) {
   return post({
@@ -23,5 +23,12 @@ export function foodDetail(id) {
 export function deleteFood(id) {
   return del({
     url: `/food/${id}`,
+  });
+}
+
+export function editFood(id, data) {
+  return patch({
+    url: `/food/${id}`,
+    data,
   });
 }

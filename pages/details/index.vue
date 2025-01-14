@@ -39,7 +39,7 @@
 
         <!-- 推荐理由 -->
         <view class="reason-content">
-          <text class="reason-text">{{ foodInfo.description }}</text>
+          <text class="reason-text">{{ foodInfo.recommendation }}</text>
           <view class="recommender-info">
             <image
               :src="foodInfo.user.avatar"
@@ -148,14 +148,23 @@
 <script setup>
 import { foodDetail, deleteFood } from "@/api/food";
 import { useMessage } from "@/uni_modules/wot-design-uni";
-import { onLoad } from "@dcloudio/uni-app";
+import { onLoad, onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
+import { getUserInfo } from "@/api/user";
 
 const foodId = ref("");
 
 onLoad(async (options) => {
   foodId.value = options.id;
   await getFoodDetail();
+  await getUser();
+  showActions.value = foodInfo.value.userId === userInfo.value.id;
+});
+
+onShow(async () => {
+  await getFoodDetail();
+  await getUser();
+  showActions.value = foodInfo.value.userId === userInfo.value.id;
 });
 
 async function getFoodDetail() {
@@ -203,7 +212,6 @@ const handleOpenLocation = () => {
   });
 };
 
-// 模拟数据
 const foodInfo = ref({});
 
 const isCollected = ref(false);
@@ -267,13 +275,22 @@ const ratingBars = computed(() => {
   }));
 });
 
+// 用户信息
+const userInfo = ref({});
+
+// 获取用户信息
+const getUser = async () => {
+  const res = await getUserInfo();
+  userInfo.value = res;
+};
+
 // 是否显示操作按钮
-const showActions = ref(true);
+const showActions = ref(false);
 
 // 编辑推荐
 const handleEdit = () => {
-  uni.switchTab({
-    url: `/pages/recommend/index?type=edit`,
+  uni.navigateTo({
+    url: `/pages/details/editFood?id=${foodId.value}`,
   });
 };
 

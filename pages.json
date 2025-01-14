@@ -60,6 +60,12 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/details/editFood",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {

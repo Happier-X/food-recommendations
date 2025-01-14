@@ -1,11 +1,11 @@
 <template>
   <view class="recommend-container">
-    <wd-navbar fixed placeholder title="推荐美食" safeAreaInsetTop></wd-navbar>
+    <wd-navbar fixed placeholder title="编辑美食" safeAreaInsetTop></wd-navbar>
 
     <view class="form-container">
       <!-- 美食名称 -->
       <wd-input
-        v-model="formData.title"
+        v-model="formData.name"
         label="美食名称"
         label-width="140rpx"
         placeholder="请输入美食名称"
@@ -64,7 +64,7 @@
 
       <!-- 推荐理由 -->
       <wd-textarea
-        v-model="formData.description"
+        v-model="formData.recommendation"
         label="推荐理由"
         label-width="140rpx"
         placeholder="请输入推荐理由"
@@ -77,7 +77,7 @@
         <text class="label">上传图片</text>
         <wd-upload
           accept="image"
-          v-model:file-list="formData.images"
+          v-model:file-list="formData.imageUrl"
           :limit="3"
           multiple
           action="https://mockapi.eolink.com/zhTuw2P8c29bc981a741931bdd86eb04dc1e8fd64865cb5/upload"
@@ -95,17 +95,25 @@
 
 <script setup>
 import { ref } from "vue";
-import { createFood } from "../../api/food";
+import { editFood, foodDetail } from "../../api/food";
+import { onLoad } from "@dcloudio/uni-app";
+
+const foodId = ref("");
+onLoad(async (options) => {
+  foodId.value = options.id;
+  const res = await foodDetail(options.id);
+  formData.value = res;
+});
 
 // 表单数据
 const formData = ref({
-  title: "",
+  name: "",
   shopName: "",
   location: "",
   rating: 5,
   foodType: "",
-  description: "",
-  images: "",
+  recommendation: "",
+  imageUrl: "",
 });
 
 const foodTypes = [
@@ -151,7 +159,7 @@ const onFoodTypeConfirm = (value) => {
 // 提交表单
 const handleSubmit = async () => {
   // 表单验证
-  if (!formData.value.title) {
+  if (!formData.value.name) {
     uni.showToast({ title: "请输入美食名称", icon: "none" });
     return;
   }
@@ -167,7 +175,7 @@ const handleSubmit = async () => {
     uni.showToast({ title: "请选择食物类型", icon: "none" });
     return;
   }
-  if (!formData.value.description) {
+  if (!formData.value.recommendation) {
     uni.showToast({ title: "请输入推荐理由", icon: "none" });
     return;
   }
@@ -177,27 +185,14 @@ const handleSubmit = async () => {
   // }
 
   try {
-    await createFood({
-      name: formData.value.title,
-      shopName: formData.value.shopName,
-      location: formData.value.location,
-      rating: formData.value.rating,
-      foodType: formData.value.foodType,
-      recommendation: formData.value.description,
-      imageUrl: "",
-    });
-    uni.showToast({ title: "提交成功", icon: "none" });
-    formData.value = {
-      title: "",
-      shopName: "",
-      location: "",
-      rating: 5,
-      foodType: "",
-      description: "",
-      images: "",
-    };
+    await editFood(foodId.value, formData.value);
+    uni.showToast({ title: "修改成功", icon: "none" });
+    formData.value = {};
+    setTimeout(() => {
+      uni.navigateBack();
+    }, 1000);
   } catch (error) {
-    uni.showToast({ title: "提交失败", icon: "none" });
+    uni.showToast({ title: "修改失败", icon: "none" });
   }
 };
 </script>
