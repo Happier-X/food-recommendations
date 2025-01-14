@@ -32,7 +32,7 @@
                 label="用户名"
                 label-width="25%"
                 width="100%"
-                v-model="loginForm.username"
+                v-model="loginForm.name"
                 placeholder="请输入用户名"
                 clearable
               />
@@ -71,8 +71,8 @@
               "
             >
               <wd-radio-group v-model="registerForm.role" shape="button">
-                <wd-radio value="personal">个人用户</wd-radio>
-                <wd-radio value="business">商家用户</wd-radio>
+                <wd-radio value="0">个人用户</wd-radio>
+                <wd-radio value="1">商家用户</wd-radio>
               </wd-radio-group>
             </view>
             <view class="form-item">
@@ -80,7 +80,7 @@
                 label="用户名"
                 label-width="25%"
                 width="100%"
-                v-model="registerForm.username"
+                v-model="registerForm.name"
                 placeholder="请输入用户名"
                 clearable
               />
@@ -131,22 +131,22 @@ import { login, register } from "@/api/auth";
 const activeTab = ref(0);
 
 const loginForm = ref({
-  username: "",
+  name: "",
   password: "",
 });
 
 const registerForm = ref({
-  username: "",
+  name: "",
   password: "",
   confirmPassword: "",
-  role: "personal",
+  role: "0",
 });
 
 // 统一的提交处理函数
 const handleSubmit = async () => {
   if (activeTab.value === 0) {
     // 登录逻辑
-    if (!loginForm.value.username || !loginForm.value.password) {
+    if (!loginForm.value.name || !loginForm.value.password) {
       uni.showToast({
         title: "请填写完整信息",
         icon: "none",
@@ -155,7 +155,7 @@ const handleSubmit = async () => {
     }
     try {
       const res = await login({
-        name: loginForm.value.username,
+        name: loginForm.value.name,
         password: loginForm.value.password,
       });
       uni.setStorageSync("token", res.access_token);
@@ -172,7 +172,7 @@ const handleSubmit = async () => {
   } else {
     // 注册逻辑
     if (
-      !registerForm.value.username ||
+      !registerForm.value.name ||
       !registerForm.value.password ||
       !registerForm.value.confirmPassword
     ) {
@@ -192,8 +192,8 @@ const handleSubmit = async () => {
     }
     try {
       await register({
-        name: registerForm.value.username,
-        role: registerForm.value.role === "personal" ? 0 : 1,
+        name: registerForm.value.name,
+        role: registerForm.value.role,
         password: registerForm.value.password,
       });
       uni.showToast({

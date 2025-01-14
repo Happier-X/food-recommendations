@@ -35,20 +35,20 @@ import { get, post, del } from "@/utils/request";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
 const tab = ref("全部");
 const categoryList = ref([
-  { value: 0, label: "全部" },
-  { value: 1, label: "饺子馄饨" },
-  { value: 2, label: "火锅烤肉" },
-  { value: 3, label: "包子粥面" },
-  { value: 4, label: "快餐便当" },
-  { value: 5, label: "汉堡薯条" },
-  { value: 6, label: "意面披萨" },
-  { value: 7, label: "川湘菜" },
-  { value: 8, label: "地方菜系" },
-  { value: 9, label: "炸鸡炸串" },
-  { value: 10, label: "特色小吃" },
-  { value: 11, label: "西餐" },
-  { value: 12, label: "日料寿司" },
-  { value: 13, label: "韩式料理" },
+  { value: "0", label: "全部" },
+  { value: "1", label: "饺子馄饨" },
+  { value: "2", label: "火锅烤肉" },
+  { value: "3", label: "包子粥面" },
+  { value: "4", label: "快餐便当" },
+  { value: "5", label: "汉堡薯条" },
+  { value: "6", label: "意面披萨" },
+  { value: "7", label: "川湘菜" },
+  { value: "8", label: "地方菜系" },
+  { value: "9", label: "炸鸡炸串" },
+  { value: "10", label: "特色小吃" },
+  { value: "11", label: "西餐" },
+  { value: "12", label: "日料寿司" },
+  { value: "13", label: "韩式料理" },
 ]);
 const list = ref([
   {
