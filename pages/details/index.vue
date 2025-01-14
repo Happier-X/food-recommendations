@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-import { foodDetail } from "@/api/food";
+import { foodDetail, deleteFood } from "@/api/food";
 import { useMessage } from "@/uni_modules/wot-design-uni";
 import { onLoad } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
@@ -155,13 +155,11 @@ const foodId = ref("");
 
 onLoad(async (options) => {
   foodId.value = options.id;
-  console.log(foodId.value);
   await getFoodDetail();
 });
 
 async function getFoodDetail() {
   const res = await foodDetail(foodId.value);
-  console.log(res);
   foodInfo.value = res;
 }
 
@@ -194,9 +192,7 @@ const handleOpenLocation = () => {
     longitude: 113.32452, // 天河区体育西路的大致经度
     name: foodInfo.value.shopName,
     address: foodInfo.value.location,
-    success: () => {
-      console.log("打开地图成功");
-    },
+    success: () => {},
     fail: (err) => {
       uni.showToast({
         title: "打开地图失败",
@@ -291,10 +287,10 @@ const handleDelete = () => {
       title: "提示",
       msg: "确定要删除这条推荐吗？",
     })
-    .then(() => {
-      console.log("删除成功");
+    .then(async () => {
+      const res = await deleteFood(foodId.value);
       uni.showToast({
-        title: "删除成功",
+        title: res.message,
         icon: "success",
         success: () => {
           setTimeout(() => {
@@ -303,9 +299,7 @@ const handleDelete = () => {
         },
       });
     })
-    .catch(() => {
-      console.log("取消删除");
-    });
+    .catch(() => {});
 };
 </script>
 

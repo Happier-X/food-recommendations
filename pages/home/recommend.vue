@@ -6,7 +6,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
+import { onShow } from "@dcloudio/uni-app";
 import { food } from "@/api/food";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
 
@@ -22,7 +23,7 @@ const getFoodList = async () => {
 };
 
 // 在组件挂载时获取食物列表
-onMounted(() => {
+onShow(() => {
   getFoodList();
 });
 </script>

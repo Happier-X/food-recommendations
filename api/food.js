@@ -1,5 +1,4 @@
-import { post } from "@/utils/request";
-import { get } from "../utils/request";
+import { get, del, post } from "../utils/request";
 
 export function createFood(data) {
   return post({
@@ -17,6 +16,12 @@ export function food(params) {
 
 export function foodDetail(id) {
   return get({
+    url: `/food/${id}`,
+  });
+}
+
+export function deleteFood(id) {
+  return del({
     url: `/food/${id}`,
   });
 }
