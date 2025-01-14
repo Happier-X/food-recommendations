@@ -46,7 +46,6 @@
                 placeholder="请输入密码"
                 clearable
                 show-password
-                type="password"
               />
             </view>
             <view class="form-item" style="opacity: 0">
@@ -57,7 +56,6 @@
                 v-model="registerForm.confirmPassword"
                 placeholder="请再次输入密码"
                 show-password
-                type="password"
                 clearable
               />
             </view>
@@ -94,9 +92,8 @@
                 width="100%"
                 v-model="registerForm.password"
                 placeholder="请输入密码"
-                show-password
                 clearable
-                type="password"
+                show-password
               />
             </view>
             <view class="form-item">
@@ -107,7 +104,6 @@
                 v-model="registerForm.confirmPassword"
                 placeholder="请再次输入密码"
                 show-password
-                type="password"
                 clearable
               />
             </view>
