@@ -15,7 +15,7 @@ export function food(params) {
   });
 }
 
-export function getFoodDetail(id) {
+export function foodDetail(id) {
   return get({
     url: `/food/${id}`,
   });

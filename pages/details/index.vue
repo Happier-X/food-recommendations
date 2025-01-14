@@ -20,7 +20,7 @@
       <!-- 基本信息 -->
       <view class="info-section">
         <view class="title-row">
-          <text class="title">{{ foodInfo.title }}</text>
+          <text class="title">{{ foodInfo.name }}</text>
           <view class="right-actions">
             <view class="rating">
               <text class="rating-text">{{ foodInfo.rating.toFixed(1) }}</text>
@@ -42,11 +42,11 @@
           <text class="reason-text">{{ foodInfo.description }}</text>
           <view class="recommender-info">
             <image
-              :src="foodInfo.recommender.avatar"
+              :src="foodInfo.user.avatar"
               class="avatar"
               mode="aspectFill"
             />
-            <text class="username">{{ foodInfo.recommender.username }}</text>
+            <text class="username">{{ foodInfo.user.name }}</text>
           </view>
         </view>
       </view>
@@ -69,7 +69,9 @@
         <view class="info-item">
           <wd-icon name="attach" size="16" />
           <text class="label">食物类型</text>
-          <text class="value">{{ foodInfo.foodType }}</text>
+          <text class="value">{{
+            foodTypes[foodInfo.foodType - 1].label
+          }}</text>
         </view>
       </view>
 
@@ -144,8 +146,40 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { foodDetail } from "@/api/food";
 import { useMessage } from "@/uni_modules/wot-design-uni";
+import { onLoad } from "@dcloudio/uni-app";
+import { computed, ref } from "vue";
+
+const foodId = ref("");
+
+onLoad(async (options) => {
+  foodId.value = options.id;
+  console.log(foodId.value);
+  await getFoodDetail();
+});
+
+async function getFoodDetail() {
+  const res = await foodDetail(foodId.value);
+  console.log(res);
+  foodInfo.value = res;
+}
+
+const foodTypes = [
+  { value: "1", label: "饺子馄饨" },
+  { value: "2", label: "火锅烤肉" },
+  { value: "3", label: "包子粥面" },
+  { value: "4", label: "快餐便当" },
+  { value: "5", label: "汉堡薯条" },
+  { value: "6", label: "意面披萨" },
+  { value: "7", label: "川湘菜" },
+  { value: "8", label: "地方菜系" },
+  { value: "9", label: "炸鸡炸串" },
+  { value: "10", label: "特色小吃" },
+  { value: "11", label: "西餐" },
+  { value: "12", label: "日料寿司" },
+  { value: "13", label: "韩式料理" },
+];
 
 // 返回上一页
 const handleBack = () => {
@@ -174,29 +208,7 @@ const handleOpenLocation = () => {
 };
 
 // 模拟数据
-const foodInfo = ref({
-  title: "香辣小龙虾",
-  shopName: "蒜香小龙虾",
-  location: "广州市天河区体育西路100号",
-  latitude: 23.13171,
-  longitude: 113.32452,
-  rating: 4.8,
-  foodType: "小龙虾",
-  description:
-    "这家小龙虾的蒜香味道非常浓郁，虾肉鲜嫩饱满，配上秘制的酱料，让人回味无穷。特别是他们家的十三香小龙虾，香味四溢，连壳都想咬上一口！建议点3-4斤，配上一份茶位，和朋友一起分享绝对是夏夜最佳的选择。",
-  images: [
-    "https://registry.npmmirror.com/wot-design-uni-assets/*/files/redpanda.jpg",
-    "https://registry.npmmirror.com/wot-design-uni-assets/*/files/capybara.jpg",
-    "https://registry.npmmirror.com/wot-design-uni-assets/*/files/panda.jpg",
-    "https://registry.npmmirror.com/wot-design-uni-assets/*/files/moon.jpg",
-    "https://registry.npmmirror.com/wot-design-uni-assets/*/files/meng.jpg",
-  ],
-  recommender: {
-    avatar: "/static/avatar.jpg",
-    username: "美食达人",
-    recommendTime: "2024-01-20 18:30",
-  },
-});
+const foodInfo = ref({});
 
 const isCollected = ref(false);
 
