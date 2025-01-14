@@ -48,7 +48,6 @@ function request(options) {
 
     config = requestInterceptor(config);
 
-    // 延迟显示loading
     loadingTimer = setTimeout(() => {
       uni.showLoading({
         title: "加载中",
@@ -67,7 +66,11 @@ function request(options) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(res.data);
         } else {
-          reject(res);
+          const error = new Error(res.data.message || "请求失败");
+          error.response = res;
+          error.status = res.statusCode;
+          reject(error);
+
           uni.showToast({
             title: res.data.message || "请求失败",
             icon: "none",
@@ -77,11 +80,18 @@ function request(options) {
       fail: (err) => {
         clearTimeout(loadingTimer);
         uni.hideLoading();
-        reject(err);
+
+        const error = new Error(err.errMsg || "网络错误");
+        error.original = err;
+        reject(error);
+
         uni.showToast({
           title: "网络错误",
           icon: "none",
         });
+      },
+      complete: () => {
+        clearTimeout(loadingTimer);
       },
     });
   });
