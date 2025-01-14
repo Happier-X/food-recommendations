@@ -95,6 +95,7 @@
 
 <script setup>
 import { ref } from "vue";
+import { createFood } from "../../api/food";
 
 // 表单数据
 const formData = ref({
@@ -104,41 +105,42 @@ const formData = ref({
   rating: 5,
   foodType: "",
   description: "",
-  images: [],
+  images: "",
 });
 
 const foodTypes = [
-  { value: 1, label: "饺子馄饨" },
-  { value: 2, label: "火锅烤肉" },
-  { value: 3, label: "包子粥面" },
-  { value: 4, label: "快餐便当" },
-  { value: 5, label: "汉堡薯条" },
-  { value: 6, label: "意面披萨" },
-  { value: 7, label: "川湘菜" },
-  { value: 8, label: "地方菜系" },
-  { value: 9, label: "炸鸡炸串" },
-  { value: 10, label: "特色小吃" },
-  { value: 11, label: "西餐" },
-  { value: 12, label: "日料寿司" },
-  { value: 13, label: "韩式料理" },
+  { value: "1", label: "饺子馄饨" },
+  { value: "2", label: "火锅烤肉" },
+  { value: "3", label: "包子粥面" },
+  { value: "4", label: "快餐便当" },
+  { value: "5", label: "汉堡薯条" },
+  { value: "6", label: "意面披萨" },
+  { value: "7", label: "川湘菜" },
+  { value: "8", label: "地方菜系" },
+  { value: "9", label: "炸鸡炸串" },
+  { value: "10", label: "特色小吃" },
+  { value: "11", label: "西餐" },
+  { value: "12", label: "日料寿司" },
+  { value: "13", label: "韩式料理" },
 ];
 
 // 选择位置
 const chooseLocation = () => {
-  uni.chooseLocation({
-    success: (res) => {
-      formData.value.location = res.address;
-      // 保存经纬度信息
-      formData.value.latitude = res.latitude;
-      formData.value.longitude = res.longitude;
-    },
-    fail: () => {
-      uni.showToast({
-        title: "选择位置失败",
-        icon: "none",
-      });
-    },
-  });
+  // uni.chooseLocation({
+  //   success: (res) => {
+  //     formData.value.location = res.address;
+  //     // 保存经纬度信息
+  //     formData.value.latitude = res.latitude;
+  //     formData.value.longitude = res.longitude;
+  //   },
+  //   fail: () => {
+  //     uni.showToast({
+  //       title: "选择位置失败",
+  //       icon: "none",
+  //     });
+  //   },
+  // });
+  formData.value.location = "北京市海淀区中关村大街";
 };
 
 // 食物类型确认
@@ -147,7 +149,7 @@ const onFoodTypeConfirm = (value) => {
 };
 
 // 提交表单
-const handleSubmit = () => {
+const handleSubmit = async () => {
   // 表单验证
   if (!formData.value.title) {
     uni.showToast({ title: "请输入美食名称", icon: "none" });
@@ -169,31 +171,35 @@ const handleSubmit = () => {
     uni.showToast({ title: "请输入推荐理由", icon: "none" });
     return;
   }
-  if (formData.value.images.length === 0) {
-    uni.showToast({ title: "请上传至少一张图片", icon: "none" });
-    return;
+  // if (formData.value.images.length === 0) {
+  //   uni.showToast({ title: "请上传至少一张图片", icon: "none" });
+  //   return;
+  // }
+
+  try {
+    await createFood({
+      name: formData.value.title,
+      shopName: formData.value.shopName,
+      location: formData.value.location,
+      rating: formData.value.rating,
+      foodType: formData.value.foodType,
+      recommendation: formData.value.description,
+      imageUrl: "",
+    });
+    uni.showToast({ title: "提交成功", icon: "none" });
+    formData.value = {
+      title: "",
+      shopName: "",
+      location: "",
+      rating: 5,
+      foodType: "",
+      description: "",
+      images: "",
+    };
+  } catch (error) {
+    console.log(error);
+    uni.showToast({ title: "提交失败", icon: "none" });
   }
-
-  // TODO: 提交表单数据
-  console.log("提交的表单数据：", formData.value);
-
-  // 模拟提交成功
-  uni.showToast({
-    title: "提交成功",
-    icon: "success",
-    success: () => {
-      // 提交成功后重置表单
-      formData.value = {
-        title: "",
-        shopName: "",
-        location: "",
-        rating: 5,
-        foodType: "",
-        description: "",
-        images: [],
-      };
-    },
-  });
 };
 </script>
 
