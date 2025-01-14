@@ -29,7 +29,6 @@ function responseInterceptor(response) {
     uni.navigateTo({
       url: "/pages/auth/index",
     });
-    return;
   }
   return response;
 }

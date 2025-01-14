@@ -126,7 +126,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { post } from "@/utils/request";
+import { login, register } from "@/api/auth";
 
 const activeTab = ref(0);
 
@@ -154,21 +154,18 @@ const handleSubmit = async () => {
       return;
     }
     try {
-      const res = await post({
-        url: "/auth/login",
-        data: {
-          name: loginForm.value.username,
-          password: loginForm.value.password,
-        },
+      const res = await login({
+        name: loginForm.value.username,
+        password: loginForm.value.password,
       });
-        uni.setStorageSync("token", res.access_token);
-        uni.showToast({
-          title: "登录成功",
-          icon: "none",
-        });
-        uni.switchTab({
-          url: "/pages/home/index",
-        });
+      uni.setStorageSync("token", res.access_token);
+      uni.showToast({
+        title: "登录成功",
+        icon: "none",
+      });
+      uni.switchTab({
+        url: "/pages/home/index",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -193,21 +190,18 @@ const handleSubmit = async () => {
       });
       return;
     }
-    try{
-const res = await post({
-  url:"/auth/register",
-  data:{
-    name:registerForm.value.username,
-    role:registerForm.value.role === 'personal' ? 0 : 1,
-    password:registerForm.value.password
-  }
-})
-uni.showToast({
-  title:'注册成功',
-  icon:'none'
-})
-    }catch(err){
-console.log(err)
+    try {
+      await register({
+        name: registerForm.value.username,
+        role: registerForm.value.role === "personal" ? 0 : 1,
+        password: registerForm.value.password,
+      });
+      uni.showToast({
+        title: "注册成功",
+        icon: "none",
+      });
+    } catch (err) {
+      console.log(err);
     }
   }
 };
