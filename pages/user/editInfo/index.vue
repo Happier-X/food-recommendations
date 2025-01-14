@@ -31,7 +31,7 @@
       <!-- 用户名 -->
       <view class="edit-item">
         <wd-input
-          v-model="userInfo.username"
+          v-model="userInfo.name"
           label="用户名"
           label-width="140rpx"
           placeholder="请输入用户名"
@@ -64,33 +64,46 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { getUserInfo, updateUser } from "@/api/user";
 
 // 用户信息
 const userInfo = ref({
-  avatar: "/static/avatar.jpg",
-  username: "美食达人",
+  id: "",
+  avatar: "",
+  name: "",
+  preference: "",
 });
 
+onMounted(async () => {
+  await getUser();
+  selectedTypes.value = userInfo.value.preference.split(",");
+});
+
+// 获取用户信息
+async function getUser() {
+  const res = await getUserInfo();
+  userInfo.value = res;
+}
 // 食物类型列表
 const foodTypes = ref([
-  { value: 1, label: "饺子馄饨" },
-  { value: 2, label: "火锅烤肉" },
-  { value: 3, label: "包子粥面" },
-  { value: 4, label: "快餐便当" },
-  { value: 5, label: "汉堡薯条" },
-  { value: 6, label: "意面披萨" },
-  { value: 7, label: "川湘菜" },
-  { value: 8, label: "地方菜系" },
-  { value: 9, label: "炸鸡炸串" },
-  { value: 10, label: "特色小吃" },
-  { value: 11, label: "西餐" },
-  { value: 12, label: "日料寿司" },
-  { value: 13, label: "韩式料理" },
+  { value: "1", label: "饺子馄饨" },
+  { value: "2", label: "火锅烤肉" },
+  { value: "3", label: "包子粥面" },
+  { value: "4", label: "快餐便当" },
+  { value: "5", label: "汉堡薯条" },
+  { value: "6", label: "意面披萨" },
+  { value: "7", label: "川湘菜" },
+  { value: "8", label: "地方菜系" },
+  { value: "9", label: "炸鸡炸串" },
+  { value: "10", label: "特色小吃" },
+  { value: "11", label: "西餐" },
+  { value: "12", label: "日料寿司" },
+  { value: "13", label: "韩式料理" },
 ]);
 
 // 已选择的食物类型
-const selectedTypes = ref([1, 7, 12]);
+const selectedTypes = ref([]);
 
 // 返回上一页
 const handleBack = () => {
@@ -105,6 +118,7 @@ const toggleFoodType = (value) => {
   } else {
     selectedTypes.value.push(value);
   }
+  userInfo.value.preference = selectedTypes.value.join(",");
 };
 
 // 上传前处理
@@ -137,23 +151,33 @@ const handleUploadFail = () => {
 };
 
 // 保存资料
-const handleSave = () => {
-  if (!userInfo.value.username.trim()) {
+const handleSave = async () => {
+  if (!userInfo.value.name.trim()) {
     uni.showToast({
       title: "请输入用户名",
       icon: "none",
     });
     return;
   }
-
-  // 这里添加保存逻辑
-  uni.showToast({
-    title: "保存成功",
-    icon: "success",
-  });
-  setTimeout(() => {
-    uni.navigateBack();
-  }, 1500);
+  try {
+    const res = await updateUser(userInfo.value.id, {
+      name: userInfo.value.name,
+      avatar: userInfo.value.avatar,
+      preference: userInfo.value.preference,
+    });
+    uni.showToast({
+      title: "保存成功",
+      icon: "success",
+    });
+    setTimeout(() => {
+      uni.navigateBack();
+    }, 1500);
+  } catch (error) {
+    uni.showToast({
+      title: "保存失败",
+      icon: "none",
+    });
+  }
 };
 </script>
 

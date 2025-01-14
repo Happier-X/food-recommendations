@@ -1,10 +1,8 @@
 import { post } from "@/utils/request";
 
-export default {
-  createFood(data) {
-    return post({
-      url: "/food",
-      data,
-    });
-  },
-};
+export function createFood(data) {
+  return post({
+    url: "/food",
+    data,
+  });
+}
