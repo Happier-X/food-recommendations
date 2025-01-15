@@ -6,20 +6,20 @@
     <!-- 用户信息区域 -->
     <view class="user-info">
       <view class="avatar-box">
-        <image class="avatar" src="/static/avatar.jpg" mode="aspectFill" />
+        <image class="avatar" :src="info.avatar" mode="aspectFill" />
         <view class="edit-avatar">
           <wd-icon name="camera-fill" size="16" color="#fff" />
         </view>
       </view>
       <view class="info-text">
-        <text class="username">admin</text>
+        <text class="username">{{ info.name }}</text>
         <view class="stats-row">
           <view class="stat-item">
-            <text class="num">12</text>
+            <text class="num">{{ info.recommendCount }}</text>
             <text class="label">推荐</text>
           </view>
           <view class="stat-item">
-            <text class="num">56</text>
+            <text class="num">{{ info.collectionCount }}</text>
             <text class="label">收藏</text>
           </view>
         </view>
@@ -84,6 +84,9 @@
 
 <script setup>
 import { useMessage } from "@/uni_modules/wot-design-uni";
+import { getUserInfo } from "@/api/user";
+import { onShow } from "@dcloudio/uni-app";
+import { ref } from "vue";
 
 const message = useMessage();
 
@@ -121,7 +124,7 @@ const handleService = (type) => {
             title: "退出成功",
             icon: "success",
             success: () => {
-              // TODO: 处理退出逻辑
+              uni.removeStorageSync("token");
               uni.navigateTo({ url: "/pages/auth/index" });
             },
           });
@@ -132,6 +135,17 @@ const handleService = (type) => {
       break;
   }
 };
+
+onShow(async () => {
+  await userInfo();
+});
+
+const info = ref({});
+
+async function userInfo() {
+  const res = await getUserInfo();
+  info.value = res;
+}
 </script>
 
 <style lang="scss" scoped>
