@@ -6,34 +6,33 @@
       placeholder="搜索美食"
       background="#f5f5f5"
       shape="round"
+      @search="handleSearch"
+      @cancel="handleCancel"
     />
   </view>
-  <wd-tabs v-model="tab" slidable="always">
+  <wd-tabs v-model="tab" slidable="always" @change="handleTabChange">
     <block v-for="item in categoryList" :key="item.value">
       <wd-tab :title="`${item.label}`" style="padding: 0 20rpx">
-        <WaterfallFlow :list="list" :column-count="2" :column-gap="30">
+        <view v-if="!foodList.length" class="empty-state">
+          <image src="/static/empty.png" mode="aspectFit" class="empty-image" />
+          <text class="empty-text">暂无相关美食~</text>
+        </view>
+        <WaterfallFlow
+          v-else
+          :list="foodList"
+          :column-count="2"
+          :column-gap="30"
+        >
         </WaterfallFlow>
       </wd-tab>
     </block>
   </wd-tabs>
-  <div>
-    <!-- 显示食物列表 -->
-    <div v-for="food in foodList" :key="food.id">
-      {{ food.name }}
-      <button @click="deleteFood(food.id)">删除</button>
-    </div>
-
-    <!-- 添加食物的表单 -->
-    <form @submit.prevent="handleSubmit">
-      <!-- 表单内容 -->
-    </form>
-  </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
-import { food } from "@/api/food";
+import { foodBySearch } from "@/api/food";
+import { ref } from "vue";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
-const tab = ref("全部");
+const tab = ref("0");
 const categoryList = ref([
   { value: "0", label: "全部" },
   { value: "1", label: "饺子馄饨" },
@@ -50,47 +49,77 @@ const categoryList = ref([
   { value: "12", label: "日料寿司" },
   { value: "13", label: "韩式料理" },
 ]);
-const list = ref([]);
-
+// 食物列表
 const foodList = ref([]);
-
-// 获取食物列表的方法
+// 搜索值
+const searchValue = ref("");
+// 当前tab
+const currentTab = ref("");
+function handleTabChange(e) {
+  currentTab.value = e;
+  getFoodList();
+}
+// 获取食物列表
 const getFoodList = async () => {
   try {
-    const res = await food();
-    console.log(res);
-    // foodList.value = data;
+    const res = await foodBySearch(
+      categoryList.value[currentTab.value.index].value,
+      searchValue.value
+    );
+    foodList.value = res;
   } catch (error) {
     console.error("获取食物列表失败:", error);
   }
 };
 
-// 修改添加食物的方法
-const addFood = async (foodData) => {
-  try {
-    const result = await post("/foods", foodData);
-    await getFoodList();
-    return result;
-  } catch (error) {
-    console.error("添加食物失败:", error);
-    throw error;
+// 搜索
+const handleSearch = async (e) => {
+  if (!e.value) {
+    uni.showToast({
+      title: "请输入搜索内容",
+      icon: "none",
+    });
+    return;
   }
-};
-
-// 修改删除食物的方法
-const deleteFood = async (foodId) => {
-  try {
-    await del(`/foods/${foodId}`);
-    await getFoodList();
-  } catch (error) {
-    console.error("删除食物失败:", error);
-    throw error;
-  }
-};
-
-// 在组件挂载时获取食物列表
-onMounted(() => {
+  searchValue.value = e.value;
   getFoodList();
-});
+};
+
+// 取消搜索
+const handleCancel = async () => {
+  try {
+    searchValue.value = "";
+    getFoodList();
+  } catch (error) {
+    console.error("获取食物列表失败:", error);
+    uni.showToast({
+      title: "获取列表失败",
+      icon: "none",
+    });
+  }
+};
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+
+  .empty-image {
+    width: 240rpx;
+    height: 240rpx;
+    margin-bottom: 20rpx;
+  }
+
+  .empty-text {
+    font-size: 28rpx;
+    color: #999;
+  }
+}
+
+.search-box {
+  padding: 20rpx;
+}
+</style>

@@ -32,3 +32,9 @@ export function editFood(id, data) {
     data,
   });
 }
+
+export function foodBySearch(id, name) {
+  return get({
+    url: `/food/search/${id}/${name}`,
+  });
+}
