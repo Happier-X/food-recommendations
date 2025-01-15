@@ -12,3 +12,9 @@ export function updateUser(id, data) {
     data,
   });
 }
+
+export function recommendList() {
+  return get({
+    url: `/user/recommend/`,
+  });
+}
