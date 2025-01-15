@@ -160,12 +160,14 @@ onLoad(async (options) => {
   await getFoodDetail();
   await getUser();
   showActions.value = foodInfo.value.userId === userInfo.value.id;
+  isCollected.value = foodInfo.value.isCollected;
 });
 
 onShow(async () => {
   await getFoodDetail();
   await getUser();
   showActions.value = foodInfo.value.userId === userInfo.value.id;
+  isCollected.value = foodInfo.value.isCollected;
 });
 
 async function getFoodDetail() {
