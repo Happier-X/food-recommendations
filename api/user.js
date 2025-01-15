@@ -1,4 +1,4 @@
-import { patch, get, post } from "@/utils/request";
+import { get, patch } from "@/utils/request";
 
 export function getUserInfo() {
   return get({

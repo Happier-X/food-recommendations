@@ -23,7 +23,9 @@
           <text class="title">{{ foodInfo.name }}</text>
           <view class="right-actions">
             <view class="rating">
-              <text class="rating-text">{{ foodInfo.rating.toFixed(1) }}</text>
+              <text class="rating-text">{{
+                foodInfo.averageRating.toFixed(1)
+              }}</text>
             </view>
             <view class="collect-btn" @click.stop="handleCollect">
               <wd-icon
@@ -94,7 +96,9 @@
         <!-- 评分统计 -->
         <view class="rating-stats">
           <view class="stats-left">
-            <text class="average-score">{{ foodInfo.rating.toFixed(1) }}</text>
+            <text class="average-score">{{
+              foodInfo.averageRating.toFixed(1)
+            }}</text>
             <view class="total-rating">
               <wd-rate :model-value="foodInfo.rating" :size="12" disabled />
               <text class="rating-count">{{ ratingList.length }}条评分</text>
@@ -152,6 +156,7 @@ import { onLoad, onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
 import { getUserInfo } from "@/api/user";
 import { createCollection } from "@/api/collection";
+import { rating, getRatingList } from "@/api/rating";
 
 const foodId = ref("");
 
@@ -161,6 +166,8 @@ onLoad(async (options) => {
   await getUser();
   showActions.value = foodInfo.value.userId === userInfo.value.id;
   isCollected.value = foodInfo.value.isCollected;
+  userRating.value = foodInfo.value.userRating;
+  await getUserRatingList();
 });
 
 onShow(async () => {
@@ -168,6 +175,8 @@ onShow(async () => {
   await getUser();
   showActions.value = foodInfo.value.userId === userInfo.value.id;
   isCollected.value = foodInfo.value.isCollected;
+  userRating.value = foodInfo.value.userRating;
+  await getUserRatingList();
 });
 
 async function getFoodDetail() {
@@ -231,41 +240,31 @@ const handleCollect = async () => {
 };
 
 // 用户评分
-const userRating = ref(3);
+const userRating = ref(0);
 
 // 处理用户评分变化
-const handleRatingChange = (value) => {
-  userRating.value = value;
-  uni.showToast({
-    title: "评分成功",
-    icon: "success",
+const handleRatingChange = async (value) => {
+  userRating.value = value.value;
+  const res = await rating({
+    foodId: +foodId.value,
+    userRating: userRating.value,
   });
+  uni.showToast({
+    title: res.message,
+    icon: "none",
+  });
+  await getUserRatingList();
+  await getFoodDetail();
 };
 
 // 模拟评分数据
-const ratingList = ref([
-  {
-    username: "用户1",
-    avatar:
-      "https://registry.npmmirror.com/wot-design-uni-assets/*/files/avatar.jpg",
-    rating: 5,
-    time: "2024-01-20",
-  },
-  {
-    username: "用户2",
-    avatar:
-      "https://registry.npmmirror.com/wot-design-uni-assets/*/files/avatar.jpg",
-    rating: 4,
-    time: "2024-01-19",
-  },
-  {
-    username: "用户3",
-    avatar:
-      "https://registry.npmmirror.com/wot-design-uni-assets/*/files/avatar.jpg",
-    rating: 5,
-    time: "2024-01-18",
-  },
-]);
+const ratingList = ref([]);
+
+// 获取评分数据
+async function getUserRatingList() {
+  const res = await getRatingList(foodId.value);
+  ratingList.value = res;
+}
 
 // 计算评分统计
 const ratingBars = computed(() => {
@@ -273,7 +272,7 @@ const ratingBars = computed(() => {
   const counts = [0, 0, 0, 0, 0];
 
   ratingList.value.forEach((item) => {
-    counts[5 - item.rating]++;
+    counts[5 - item.userRating]++;
   });
 
   return counts.map((count) => ({
