@@ -80,7 +80,7 @@
       <!-- 评分系统 -->
       <view class="rating-section">
         <!-- 用户评分输入 -->
-        <view class="rating-input">
+        <view class="rating-input" v-show="!showActions">
           <view class="rating-stars">
             <wd-rate
               v-model="userRating"

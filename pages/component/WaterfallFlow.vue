@@ -20,7 +20,9 @@
                 <text class="username">{{ item.user.name }}</text>
               </view>
               <view class="rating">
-                <text class="rating-text">{{ item.rating.toFixed(1) }}</text>
+                <text class="rating-text">{{
+                  item.averageRating.toFixed(1)
+                }}</text>
               </view>
             </view>
           </view>
