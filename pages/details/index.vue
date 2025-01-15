@@ -151,6 +151,7 @@ import { useMessage } from "@/uni_modules/wot-design-uni";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
 import { getUserInfo } from "@/api/user";
+import { createCollection } from "@/api/collection";
 
 const foodId = ref("");
 
@@ -216,10 +217,13 @@ const foodInfo = ref({});
 
 const isCollected = ref(false);
 
-const handleCollect = () => {
+const handleCollect = async () => {
   isCollected.value = !isCollected.value;
+  const res = await createCollection({
+    foodId: foodId.value,
+  });
   uni.showToast({
-    title: isCollected.value ? "收藏成功" : "取消收藏",
+    title: res.message,
     icon: "none",
   });
 };
