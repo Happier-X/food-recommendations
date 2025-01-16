@@ -77,10 +77,14 @@
         <text class="label">上传图片</text>
         <wd-upload
           accept="image"
-          v-model:file-list="formData.images"
+          v-model:file-list="formData.imageUrl"
           :limit="3"
           multiple
-          action="https://mockapi.eolink.com/zhTuw2P8c29bc981a741931bdd86eb04dc1e8fd64865cb5/upload"
+          :action="action"
+          @success="handleUploadSuccess"
+          @fail="handleUploadFail"
+          :header="header"
+          :successStatus="201"
         >
         </wd-upload>
       </view>
@@ -97,6 +101,10 @@
 import { ref } from "vue";
 import { createFood } from "../../api/food";
 
+const action = "http://localhost:3000/upload";
+const header = {
+  Authorization: `Bearer ${uni.getStorageSync("token")}`,
+};
 // 表单数据
 const formData = ref({
   title: "",
@@ -105,7 +113,7 @@ const formData = ref({
   rating: 5,
   foodType: "",
   description: "",
-  images: "",
+  imageUrl: "",
 });
 
 const foodTypes = [
@@ -148,6 +156,22 @@ const onFoodTypeConfirm = (value) => {
   formData.value.foodType = value.value;
 };
 
+// 上传成功
+const handleUploadSuccess = (res) => {
+  uni.showToast({
+    title: "上传成功",
+    icon: "success",
+  });
+};
+
+// 上传失败
+const handleUploadFail = (err) => {
+  uni.showToast({
+    title: "上传失败",
+    icon: "none",
+  });
+};
+
 // 提交表单
 const handleSubmit = async () => {
   // 表单验证
@@ -171,11 +195,6 @@ const handleSubmit = async () => {
     uni.showToast({ title: "请输入推荐理由", icon: "none" });
     return;
   }
-  // if (formData.value.images.length === 0) {
-  //   uni.showToast({ title: "请上传至少一张图片", icon: "none" });
-  //   return;
-  // }
-
   try {
     await createFood({
       name: formData.value.title,
@@ -184,7 +203,7 @@ const handleSubmit = async () => {
       rating: formData.value.rating,
       foodType: formData.value.foodType,
       recommendation: formData.value.description,
-      imageUrl: "",
+      imageUrl: formData.value.imageUrl,
     });
     uni.showToast({ title: "提交成功", icon: "none" });
     formData.value = {
@@ -194,7 +213,7 @@ const handleSubmit = async () => {
       rating: 5,
       foodType: "",
       description: "",
-      images: "",
+      imageUrl: "",
     };
   } catch (error) {
     uni.showToast({ title: "提交失败", icon: "none" });
