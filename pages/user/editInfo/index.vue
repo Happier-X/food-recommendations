@@ -22,6 +22,9 @@
             :before-read="handleBeforeRead"
             @success="handleUploadSuccess"
             @fail="handleUploadFail"
+            :action="action"
+            :header="header"
+            :successStatus="201"
           >
             <image :src="userInfo.avatar" class="avatar" mode="aspectFill" />
           </wd-upload>
@@ -67,6 +70,12 @@
 import { ref, onMounted } from "vue";
 import { getUserInfo, updateUser } from "@/api/user";
 
+const action = "http://localhost:3000/upload";
+
+const header = {
+  Authorization: `Bearer ${uni.getStorageSync("token")}`,
+};
+
 // 用户信息
 const userInfo = ref({
   id: "",
@@ -84,6 +93,7 @@ onMounted(async () => {
 async function getUser() {
   const res = await getUserInfo();
   userInfo.value = res;
+  userInfo.value.avatar = `http://localhost:3000${res.avatar}`;
 }
 // 食物类型列表
 const foodTypes = ref([
@@ -135,7 +145,7 @@ const handleBeforeRead = (file) => {
 
 // 上传成功
 const handleUploadSuccess = (res) => {
-  userInfo.value.avatar = res.tempFilePaths[0];
+  userInfo.value.avatar = JSON.parse(res.fileList[0].response).url;
   uni.showToast({
     title: "上传成功",
     icon: "success",
@@ -143,7 +153,7 @@ const handleUploadSuccess = (res) => {
 };
 
 // 上传失败
-const handleUploadFail = () => {
+const handleUploadFail = (err) => {
   uni.showToast({
     title: "上传失败",
     icon: "none",

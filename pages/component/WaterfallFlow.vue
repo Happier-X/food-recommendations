@@ -7,13 +7,17 @@
     >
       <view class="waterfall-item" v-for="(item, index) in column" :key="index">
         <view class="food-card" @click="handleClickCard(item)">
-          <image :src="item.imageUrl" mode="widthFix" class="food-image" />
+          <image
+            :src="`http://localhost:3000${item.imageUrl}`"
+            mode="widthFix"
+            class="food-image"
+          />
           <view class="card-content">
             <text class="title">{{ item.name }}</text>
             <view class="user-info">
               <view class="user-left">
                 <image
-                  :src="item.user.avatar"
+                  :src="`http://localhost:3000${item.user.avatar}`"
                   class="avatar"
                   mode="aspectFill"
                 />

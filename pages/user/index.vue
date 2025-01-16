@@ -145,6 +145,7 @@ const info = ref({});
 async function userInfo() {
   const res = await getUserInfo();
   info.value = res;
+  info.value.avatar = `http://localhost:3000${res.avatar}`;
 }
 </script>
 
