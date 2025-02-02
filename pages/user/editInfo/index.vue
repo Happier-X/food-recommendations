@@ -1,14 +1,7 @@
 <template>
   <view class="edit-info">
     <!-- 顶部导航栏 -->
-    <wd-navbar
-      fixed
-      placeholder
-      safeAreaInsetTop
-      title="编辑资料"
-      left-arrow
-      @click-left="handleBack"
-    ></wd-navbar>
+    <wd-navbar fixed placeholder safeAreaInsetTop title="编辑资料" left-arrow @click-left="handleBack"></wd-navbar>
 
     <!-- 编辑区域 -->
     <view class="edit-content">
@@ -16,16 +9,9 @@
       <view class="edit-item">
         <text class="label">头像</text>
         <view class="avatar-wrapper">
-          <wd-upload
-            v-model="userInfo.avatar"
-            :max-count="1"
-            :before-read="handleBeforeRead"
-            @success="handleUploadSuccess"
-            @fail="handleUploadFail"
-            :action="action"
-            :header="header"
-            :successStatus="201"
-          >
+          <wd-upload v-model="userInfo.avatar" :max-count="1" :before-read="handleBeforeRead"
+            @success="handleUploadSuccess" @fail="handleUploadFail" :action="action" :header="header"
+            :successStatus="201">
             <image :src="userInfo.avatar" class="avatar" mode="aspectFill" />
           </wd-upload>
         </view>
@@ -33,26 +19,15 @@
 
       <!-- 用户名 -->
       <view class="edit-item">
-        <wd-input
-          v-model="userInfo.name"
-          label="用户名"
-          label-width="140rpx"
-          placeholder="请输入用户名"
-          clearable
-        />
+        <wd-input v-model="userInfo.name" label="用户名" label-width="140rpx" placeholder="请输入用户名" clearable required />
       </view>
 
       <!-- 食物类型 -->
       <view class="edit-item food-type">
-        <text class="label">饮食喜好</text>
+        <text class="label">饮食喜好<text class="required">*</text></text>
         <view class="food-type-list">
-          <view
-            v-for="item in foodTypes"
-            :key="item.value"
-            class="type-tag"
-            :class="{ active: selectedTypes.includes(item.value) }"
-            @click="toggleFoodType(item.value)"
-          >
+          <view v-for="item in foodTypes" :key="item.value" class="type-tag"
+            :class="{ active: selectedTypes.includes(item.value) }" @click="toggleFoodType(item.value)">
             {{ item.label }}
           </view>
         </view>
@@ -92,9 +67,12 @@ onMounted(async () => {
 // 获取用户信息
 async function getUser() {
   const res = await getUserInfo();
-  userInfo.value = res;
-  userInfo.value.avatar = `http://localhost:3000${res.avatar}`;
+  userInfo.value = {
+    ...res,
+    avatar: res.avatar ? res.avatar : ''
+  };
 }
+
 // 食物类型列表
 const foodTypes = ref([
   { value: "1", label: "饺子馄饨" },
@@ -145,7 +123,9 @@ const handleBeforeRead = (file) => {
 
 // 上传成功
 const handleUploadSuccess = (res) => {
-  userInfo.value.avatar = JSON.parse(res.fileList[0].response).url;
+  const responseData = JSON.parse(res.fileList[0].response);
+  userInfo.value.avatar = `http://localhost:3000${responseData.url}`
+  console.log('111,', userInfo.value.avatar)
   uni.showToast({
     title: "上传成功",
     icon: "success",
@@ -162,14 +142,34 @@ const handleUploadFail = (err) => {
 
 // 保存资料
 const handleSave = async () => {
-  if (!userInfo.value.name.trim()) {
+  // 头像不能为空
+  if (!userInfo.value.avatar) {
     uni.showToast({
-      title: "请输入用户名",
+      title: "请上传头像",
       icon: "none",
     });
     return;
   }
+
+  if (!userInfo.value.name.trim()) {
+    uni.showToast({
+      title: "用户名不能为空",
+      icon: "none",
+    });
+    return;
+  }
+
+  if (selectedTypes.value.length === 0) {
+    uni.showToast({
+      title: "请至少选择一个饮食喜好",
+      icon: "none",
+    });
+    return;
+  }
+  console.log('2222', userInfo.value)
+
   try {
+    // const avatarPath = userInfo.value.avatar.replace('http://localhost:3000', '');
     const res = await updateUser(userInfo.value.id, {
       name: userInfo.value.name,
       avatar: userInfo.value.avatar,
@@ -278,5 +278,10 @@ const handleSave = async () => {
 .bottom-button {
   margin: 48rpx 40rpx;
   margin-bottom: calc(48rpx + env(safe-area-inset-bottom));
+}
+
+.required {
+  color: #ff4d4f;
+  margin-left: 4rpx;
 }
 </style>

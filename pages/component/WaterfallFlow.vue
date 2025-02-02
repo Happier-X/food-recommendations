@@ -1,33 +1,22 @@
 <template>
   <view class="waterfall-container">
-    <view
-      class="waterfall-column"
-      v-for="(column, columnIndex) in columns"
-      :key="columnIndex"
-    >
+    <view class="waterfall-column" v-for="(column, columnIndex) in columns" :key="columnIndex">
       <view class="waterfall-item" v-for="(item, index) in column" :key="index">
         <view class="food-card" @click="handleClickCard(item)">
-          <image
-            :src="`http://localhost:3000${item.imageUrl}`"
-            mode="widthFix"
-            class="food-image"
-          />
+          <image :src="item.image" mode="widthFix" class="food-image" />
           <view class="card-content">
             <text class="title">{{ item.name }}</text>
             <view class="user-info">
               <view class="user-left">
-                <image
-                  :src="`http://localhost:3000${item.user.avatar}`"
-                  class="avatar"
-                  mode="aspectFill"
-                />
+                <image :src="item.user.avatar" class="avatar" mode="aspectFill" />
                 <text class="username">{{ item.user.name }}</text>
               </view>
-              <view class="rating">
+              {{ item.averageRating }}
+              <!-- <view class="rating">
                 <text class="rating-text">{{
                   item.averageRating.toFixed(1)
                 }}</text>
-              </view>
+              </view> -->
             </view>
           </view>
         </view>
@@ -82,6 +71,10 @@ const initLayout = () => {
 
   // 按列数均匀分配数据
   props.list.forEach((item, index) => {
+    item.image = ''
+    if (item.imageUrl.length > 0) {
+      item.image = item.imageUrl.slice(0, 1)
+    }
     const columnIndex = index % props.columnCount;
     columns.value[columnIndex].push(item);
   });
@@ -105,6 +98,7 @@ const handleClickCard = (item) => {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .waterfall-container {
   display: flex;
   padding: 10rpx;

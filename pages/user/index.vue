@@ -6,7 +6,7 @@
     <!-- 用户信息区域 -->
     <view class="user-info">
       <view class="avatar-box">
-        <image class="avatar" :src="info.avatar" mode="aspectFill" />
+        <image class="avatar" :src="info.avatar" mode="aspectFill" @click="handleService('edit')"/>
         <view class="edit-avatar">
           <wd-icon name="camera-fill" size="16" color="#fff" />
         </view>
@@ -145,7 +145,7 @@ const info = ref({});
 async function userInfo() {
   const res = await getUserInfo();
   info.value = res;
-  info.value.avatar = `http://localhost:3000${res.avatar}`;
+  // info.value.avatar = `http://localhost:3000${res.avatar}`;
 }
 </script>
 

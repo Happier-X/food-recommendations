@@ -1,14 +1,8 @@
 <template>
   <wd-navbar fixed placeholder title="发现美食" safeAreaInsetTop></wd-navbar>
   <view class="search-box">
-    <wd-search
-      v-model="searchValue"
-      placeholder="搜索美食"
-      background="#f5f5f5"
-      shape="round"
-      @search="handleSearch"
-      @cancel="handleCancel"
-    />
+    <wd-search v-model="searchValue" placeholder="搜索美食" background="#f5f5f5" shape="round" @search="handleSearch"
+      @cancel="handleCancel" />
   </view>
   <wd-tabs v-model="tab" slidable="always" @change="handleTabChange">
     <block v-for="item in categoryList" :key="item.value">
@@ -17,13 +11,8 @@
           <image src="/static/empty.png" mode="aspectFit" class="empty-image" />
           <text class="empty-text">暂无相关美食~</text>
         </view>
-        <WaterfallFlow
-          v-else
-          :list="foodList"
-          :column-count="2"
-          :column-gap="30"
-        >
-        </WaterfallFlow>
+        <foodView v-else :list="foodList" :column-count="2" :column-gap="30">
+        </foodView>
       </wd-tab>
     </block>
   </wd-tabs>
@@ -31,7 +20,7 @@
 <script setup>
 import { foodBySearch } from "@/api/food";
 import { ref } from "vue";
-import WaterfallFlow from "../component/WaterfallFlow.vue";
+import foodView from "../component/foodView.vue";
 const tab = ref("0");
 const categoryList = ref([
   { value: "0", label: "全部" },

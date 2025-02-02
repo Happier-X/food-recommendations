@@ -37,7 +37,7 @@
       <!-- 图片上传 -->
       <view class="upload-box">
         <text class="label">上传图片</text>
-        <wd-upload accept="image" v-model:file-list="formData.imageUrl" :limit="3" multiple :action="action"
+        <wd-upload ref="uploadRef" v-model="formData.imageUrl" :limit="3" multiple :action="action"
           @success="handleUploadSuccess" @fail="handleUploadFail" :header="header" :successStatus="201">
         </wd-upload>
       </view>
@@ -66,7 +66,7 @@ const formData = ref({
   rating: 5,
   foodType: "",
   description: "",
-  imageUrl: "",
+  imageUrl: [],
 });
 
 const foodTypes = [
@@ -84,6 +84,9 @@ const foodTypes = [
   { value: "12", label: "日料寿司" },
   { value: "13", label: "韩式料理" },
 ];
+
+// 添加上传组件的引用
+const uploadRef = ref(null);
 
 // 选择位置
 const chooseLocation = () => {
@@ -111,6 +114,11 @@ const onFoodTypeConfirm = (value) => {
 
 // 上传成功
 const handleUploadSuccess = (res) => {
+  const responseData = JSON.parse(res.fileList[0].response);
+  const imgUrl = `http://localhost:3000${responseData.url}`
+  // console.log(imgUrl, 'imgUrl')
+  formData.value.imageUrl.push(imgUrl)
+
   uni.showToast({
     title: "上传成功",
     icon: "success",
@@ -149,6 +157,7 @@ const handleSubmit = async () => {
     return;
   }
   try {
+
     await createFood({
       name: formData.value.title,
       shopName: formData.value.shopName,
@@ -156,9 +165,17 @@ const handleSubmit = async () => {
       rating: formData.value.rating,
       foodType: formData.value.foodType,
       recommendation: formData.value.description,
-      imageUrl: formData.value.imageUrl,
+      imageUrl: formData.value.imageUrl.length > 0 ? formData.value.imageUrl : '',
     });
+
     uni.showToast({ title: "提交成功", icon: "none" });
+
+    // // // 先清除上传组件的显示
+    // if (uploadRef.value) {
+    //   uploadRef.value.clearFiles();
+    // }
+
+    // 再重置表单数据
     formData.value = {
       title: "",
       shopName: "",
@@ -166,9 +183,10 @@ const handleSubmit = async () => {
       rating: 5,
       foodType: "",
       description: "",
-      imageUrl: "",
+      imageUrl: [],
     };
   } catch (error) {
+    console.log(error, "error")
     uni.showToast({ title: "提交失败", icon: "none" });
   }
 };
