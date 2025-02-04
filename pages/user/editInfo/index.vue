@@ -69,8 +69,9 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getUserInfo, updateUser } from "@/api/user";
+import { BASE_URL } from "@/utils/request.js";
 
-const action = "http://localhost:3000/upload";
+const action = `${BASE_URL}/upload`;
 
 const header = {
   Authorization: `Bearer ${uni.getStorageSync("token")}`,
@@ -93,7 +94,7 @@ onMounted(async () => {
 async function getUser() {
   const res = await getUserInfo();
   userInfo.value = res;
-  userInfo.value.avatar = `http://localhost:3000${res.avatar}`;
+  userInfo.value.avatar = `${BASE_URL}${res.avatar}`;
 }
 // 食物类型列表
 const foodTypes = ref([

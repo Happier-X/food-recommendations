@@ -87,6 +87,7 @@ import { useMessage } from "@/uni_modules/wot-design-uni";
 import { getUserInfo } from "@/api/user";
 import { onShow } from "@dcloudio/uni-app";
 import { ref } from "vue";
+import { BASE_URL } from "@/utils/request.js";
 
 const message = useMessage();
 
@@ -145,7 +146,7 @@ const info = ref({});
 async function userInfo() {
   const res = await getUserInfo();
   info.value = res;
-  info.value.avatar = `http://localhost:3000${res.avatar}`;
+  info.value.avatar = `${BASE_URL}${res.avatar}`;
 }
 </script>
 
