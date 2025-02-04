@@ -80,7 +80,11 @@
           v-model:file-list="formData.imageUrl"
           :limit="3"
           multiple
-          action="https://mockapi.eolink.com/zhTuw2P8c29bc981a741931bdd86eb04dc1e8fd64865cb5/upload"
+          :action="action"
+          :header="header"
+          @success="handleUploadSuccess"
+          @fail="handleUploadFail"
+          :successStatus="201"
         >
         </wd-upload>
       </view>
@@ -97,6 +101,7 @@
 import { ref } from "vue";
 import { editFood, foodDetail } from "../../api/food";
 import { onLoad } from "@dcloudio/uni-app";
+import { BASE_URL } from "@/utils/request.js";
 
 const foodId = ref("");
 onLoad(async (options) => {
@@ -104,6 +109,11 @@ onLoad(async (options) => {
   const res = await foodDetail(options.id);
   formData.value = res;
 });
+
+const action = `${BASE_URL}/upload`;
+const header = {
+  Authorization: `Bearer ${uni.getStorageSync("token")}`,
+};
 
 // 表单数据
 const formData = ref({
@@ -113,7 +123,7 @@ const formData = ref({
   rating: 5,
   foodType: "",
   recommendation: "",
-  imageUrl: "",
+  imageUrl: [],
 });
 
 const foodTypes = [
@@ -134,21 +144,20 @@ const foodTypes = [
 
 // 选择位置
 const chooseLocation = () => {
-  // uni.chooseLocation({
-  //   success: (res) => {
-  //     formData.value.location = res.address;
-  //     // 保存经纬度信息
-  //     formData.value.latitude = res.latitude;
-  //     formData.value.longitude = res.longitude;
-  //   },
-  //   fail: () => {
-  //     uni.showToast({
-  //       title: "选择位置失败",
-  //       icon: "none",
-  //     });
-  //   },
-  // });
-  formData.value.location = "北京市海淀区中关村大街";
+  uni.chooseLocation({
+    success: (res) => {
+      formData.value.location = res.address;
+      // 保存经纬度信息
+      formData.value.latitude = res.latitude;
+      formData.value.longitude = res.longitude;
+    },
+    fail: () => {
+      uni.showToast({
+        title: "选择位置失败",
+        icon: "none",
+      });
+    },
+  });
 };
 
 // 食物类型确认
@@ -179,15 +188,25 @@ const handleSubmit = async () => {
     uni.showToast({ title: "请输入推荐理由", icon: "none" });
     return;
   }
-  // if (formData.value.images.length === 0) {
-  //   uni.showToast({ title: "请上传至少一张图片", icon: "none" });
-  //   return;
-  // }
-
+  let imageUrls = [];
+  imageUrls = formData.value.imageUrl.map((item) => {
+    return JSON.parse(item.response).url;
+  });
   try {
-    await editFood(foodId.value, formData.value);
+    await editFood(foodId.value, {
+      name: formData.value.title,
+      shopName: formData.value.shopName,
+      location: formData.value.location,
+      rating: formData.value.rating,
+      foodType: formData.value.foodType,
+      recommendation: formData.value.description,
+      imageUrl: imageUrls,
+      latitude: formData.value.latitude,
+      longitude: formData.value.longitude,
+    });
     uni.showToast({ title: "修改成功", icon: "none" });
     formData.value = {};
+    imageUrls = [];
     setTimeout(() => {
       uni.navigateBack();
     }, 1000);
