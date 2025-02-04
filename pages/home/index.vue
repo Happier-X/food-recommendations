@@ -41,7 +41,6 @@ onMounted(() => {
           batch: false
         },
         success: (result) => {
-          console.log('高德地图返回：', result);
           if (result.data.status === '1') {
             const addressComponent = result.data.regeocode.addressComponent;
             locationTitle.value = addressComponent.district || '附近';
