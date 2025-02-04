@@ -197,6 +197,10 @@ const handleSubmit = async () => {
     uni.showToast({ title: "请输入推荐理由", icon: "none" });
     return;
   }
+  let imageUrls = [];
+  imageUrls = formData.value.imageUrl.map((item) => {
+    return JSON.parse(item.response).url;
+  });
   try {
     await createFood({
       name: formData.value.title,
@@ -205,11 +209,12 @@ const handleSubmit = async () => {
       rating: formData.value.rating,
       foodType: formData.value.foodType,
       recommendation: formData.value.description,
-      imageUrl: formData.value.imageUrl,
+      imageUrl: imageUrls,
       latitude: formData.value.latitude,
       longitude: formData.value.longitude,
     });
     uni.showToast({ title: "提交成功", icon: "none" });
+    imageUrls = [];
     formData.value = {
       title: "",
       shopName: "",
