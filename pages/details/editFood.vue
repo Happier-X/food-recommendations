@@ -108,6 +108,9 @@ onLoad(async (options) => {
   foodId.value = options.id;
   const res = await foodDetail(options.id);
   formData.value = res;
+  formData.value.imageUrl = res.imageUrl.map((item) => {
+    return { url: `${BASE_URL}${item}` };
+  });
 });
 
 const action = `${BASE_URL}/upload`;
