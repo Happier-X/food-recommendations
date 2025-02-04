@@ -8,7 +8,7 @@
       <view class="waterfall-item" v-for="(item, index) in column" :key="index">
         <view class="food-card" @click="handleClickCard(item)">
           <image
-            :src="`http://localhost:3000${item.imageUrl}`"
+            :src="`${BASE_URL}${item.imageUrl[0]}`"
             mode="widthFix"
             class="food-image"
           />
@@ -17,7 +17,7 @@
             <view class="user-info">
               <view class="user-left">
                 <image
-                  :src="`http://localhost:3000${item.user.avatar}`"
+                  :src="`${BASE_URL}${item.user.avatar}`"
                   class="avatar"
                   mode="aspectFill"
                 />
@@ -38,6 +38,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
+import { BASE_URL } from "@/utils/request.js";
 
 const props = defineProps({
   // 数据列表
