@@ -4,20 +4,45 @@
 
     <view class="form-container">
       <!-- 美食名称 -->
-      <wd-input v-model="formData.title" label="美食名称" label-width="140rpx" placeholder="请输入美食名称" clearable />
+      <wd-input
+        v-model="formData.title"
+        label="美食名称"
+        label-width="140rpx"
+        placeholder="请输入美食名称"
+        clearable
+      />
 
       <!-- 商家名称 -->
-      <wd-input v-model="formData.shopName" label="商家名称" label-width="140rpx" placeholder="请输入商家名称" clearable />
+      <wd-input
+        v-model="formData.shopName"
+        label="商家名称"
+        label-width="140rpx"
+        placeholder="请输入商家名称"
+        clearable
+      />
 
       <!-- 店铺位置 -->
-      <wd-input v-model="formData.location" label="店铺位置" label-width="140rpx" placeholder="请选择店铺地址"
-        right-icon="location" readonly @click="chooseLocation" />
+      <wd-input
+        v-model="formData.location"
+        label="店铺位置"
+        label-width="140rpx"
+        placeholder="请选择店铺地址"
+        right-icon="location"
+        readonly
+        @click="chooseLocation"
+      />
 
       <!-- 评分 -->
       <wd-cell-group>
         <wd-cell title="评分" title-width="140rpx">
           <view class="rating-content">
-            <wd-rate v-model="formData.rating" :max="5" :size="18" space="18rpx" active-color="#FFC600" />
+            <wd-rate
+              v-model="formData.rating"
+              :max="5"
+              :size="18"
+              space="18rpx"
+              active-color="#FFC600"
+            />
             <text class="rating-text">{{ formData.rating.toFixed(1) }}</text>
           </view>
         </wd-cell>
@@ -26,19 +51,41 @@
       <!-- 食物类型 -->
       <wd-cell-group>
         <!-- 食物类型选择器 -->
-        <wd-picker v-model="formData.foodType" :columns="foodTypes" title="选择食物类型" label="食物类型" label-width="140rpx"
-          @confirm="onFoodTypeConfirm" @cancel="onFoodTypeCancel" />
+        <wd-picker
+          v-model="formData.foodType"
+          :columns="foodTypes"
+          title="选择食物类型"
+          label="食物类型"
+          label-width="140rpx"
+          @confirm="onFoodTypeConfirm"
+          @cancel="onFoodTypeCancel"
+        />
       </wd-cell-group>
 
       <!-- 推荐理由 -->
-      <wd-textarea v-model="formData.description" label="推荐理由" label-width="140rpx" placeholder="请输入推荐理由"
-        maxlength="200" show-count />
+      <wd-textarea
+        v-model="formData.description"
+        label="推荐理由"
+        label-width="140rpx"
+        placeholder="请输入推荐理由"
+        maxlength="200"
+        show-count
+      />
 
       <!-- 图片上传 -->
       <view class="upload-box">
         <text class="label">上传图片</text>
-        <wd-upload accept="image" v-model:file-list="formData.imageUrl" :limit="3" multiple :action="action"
-          @success="handleUploadSuccess" @fail="handleUploadFail" :header="header" :successStatus="201">
+        <wd-upload
+          accept="image"
+          v-model:file-list="formData.imageUrl"
+          :limit="3"
+          multiple
+          :action="action"
+          @success="handleUploadSuccess"
+          @fail="handleUploadFail"
+          :header="header"
+          :successStatus="201"
+        >
         </wd-upload>
       </view>
 
@@ -53,8 +100,9 @@
 <script setup>
 import { ref } from "vue";
 import { createFood } from "../../api/food";
+import { BASE_URL } from "../../utils/request.js";
 
-const action = "http://localhost:3000/upload";
+const action = `${BASE_URL}/upload`;
 const header = {
   Authorization: `Bearer ${uni.getStorageSync("token")}`,
 };
@@ -66,7 +114,9 @@ const formData = ref({
   rating: 5,
   foodType: "",
   description: "",
-  imageUrl: "",
+  imageUrl: [],
+  latitude: "",
+  longitude: "",
 });
 
 const foodTypes = [
@@ -101,7 +151,6 @@ const chooseLocation = () => {
       });
     },
   });
-  // formData.value.location = "北京市海淀区中关村大街";
 };
 
 // 食物类型确认
@@ -157,6 +206,8 @@ const handleSubmit = async () => {
       foodType: formData.value.foodType,
       recommendation: formData.value.description,
       imageUrl: formData.value.imageUrl,
+      latitude: formData.value.latitude,
+      longitude: formData.value.longitude,
     });
     uni.showToast({ title: "提交成功", icon: "none" });
     formData.value = {
@@ -166,9 +217,12 @@ const handleSubmit = async () => {
       rating: 5,
       foodType: "",
       description: "",
-      imageUrl: "",
+      imageUrl: [],
+      latitude: "",
+      longitude: "",
     };
   } catch (error) {
+    console.log(error);
     uni.showToast({ title: "提交失败", icon: "none" });
   }
 };

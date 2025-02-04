@@ -1,5 +1,5 @@
 const TOKEN_KEY = "token";
-const BASE_URL = "http://localhost:3000";
+export const BASE_URL = "http://192.168.8.248:3000";
 const REQUEST_TIMEOUT = 15000;
 const LOADING_DELAY = 50;
 let loadingTimer;
