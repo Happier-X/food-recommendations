@@ -38,3 +38,8 @@ export function foodBySearch(id, name) {
     url: `/food/search/${id}/${name}`,
   });
 }
+export function foodBysearchByLocation(lat, lng) {
+  return get({
+    url: `/food/searchByLocation/${lat}/${lng}`,
+  });
+}

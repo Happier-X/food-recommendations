@@ -7,7 +7,7 @@
         <recommend />
       </wd-tab>
       <wd-tab :title="locationTitle">
-        <position @update-location="updateLocationTitle" />
+        <position @update-location="updateLocationTitle" :initial-coordinates="coordinates" />
       </wd-tab>
     </wd-tabs>
   </view>
@@ -20,9 +20,11 @@ import position from "./position.vue";
 
 const activeTab = ref(0);
 const locationTitle = ref('附近');
+const coordinates = ref(null);
 
 // 更新位置标题
 const updateLocationTitle = (newLocation) => {
+  console.log('7877', newLocation)
   locationTitle.value = newLocation;
 };
 
@@ -31,6 +33,12 @@ onMounted(() => {
   uni.getLocation({
     type: 'gcj02',
     success: (res) => {
+      // 保存坐标信息
+      coordinates.value = {
+        longitude: res.longitude,
+        latitude: res.latitude
+      };
+      // console.log(coordinates.value, "90909")
       // 使用高德地图逆地理编码
       uni.request({
         url: 'https://restapi.amap.com/v3/geocode/regeo',
