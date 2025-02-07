@@ -1,14 +1,7 @@
 <template>
   <view class="edit-info">
     <!-- 顶部导航栏 -->
-    <wd-navbar
-      fixed
-      placeholder
-      safeAreaInsetTop
-      title="编辑资料"
-      left-arrow
-      @click-left="handleBack"
-    ></wd-navbar>
+    <wd-navbar fixed placeholder safeAreaInsetTop title="编辑资料" left-arrow @click-left="handleBack"></wd-navbar>
 
     <!-- 编辑区域 -->
     <view class="edit-content">
@@ -16,43 +9,25 @@
       <view class="edit-item">
         <text class="label">头像</text>
         <view class="avatar-wrapper">
-          <wd-upload
-            v-model="userInfo.avatar"
-            :max-count="1"
-            :before-read="handleBeforeRead"
-            @success="handleUploadSuccess"
-            @fail="handleUploadFail"
-            :action="action"
-            :header="header"
-            :successStatus="201"
-          >
-            <image :src="userInfo.avatar" class="avatar" mode="aspectFill" />
+          <wd-upload v-model="userInfo.avatar" :max-count="1" :before-read="handleBeforeRead"
+            @success="handleUploadSuccess" @fail="handleUploadFail" :action="action" :header="header"
+            :successStatus="201">
+            <image :src="imgAvatar" class="avatar" mode="aspectFill" />
           </wd-upload>
         </view>
       </view>
 
       <!-- 用户名 -->
       <view class="edit-item">
-        <wd-input
-          v-model="userInfo.name"
-          label="用户名"
-          label-width="140rpx"
-          placeholder="请输入用户名"
-          clearable
-        />
+        <wd-input v-model="userInfo.name" label="用户名" label-width="140rpx" placeholder="请输入用户名" clearable />
       </view>
 
       <!-- 食物类型 -->
       <view class="edit-item food-type">
         <text class="label">饮食喜好</text>
         <view class="food-type-list">
-          <view
-            v-for="item in foodTypes"
-            :key="item.value"
-            class="type-tag"
-            :class="{ active: selectedTypes.includes(item.value) }"
-            @click="toggleFoodType(item.value)"
-          >
+          <view v-for="item in foodTypes" :key="item.value" class="type-tag"
+            :class="{ active: selectedTypes.includes(item.value) }" @click="toggleFoodType(item.value)">
             {{ item.label }}
           </view>
         </view>
@@ -89,12 +64,13 @@ onMounted(async () => {
   await getUser();
   selectedTypes.value = userInfo.value.preference.split(",");
 });
-
+const imgAvatar = ref("");
 // 获取用户信息
 async function getUser() {
   const res = await getUserInfo();
   userInfo.value = res;
-  userInfo.value.avatar = `${BASE_URL}${res.avatar}`;
+  imgAvatar.value = res.avatar ? `${BASE_URL}${res.avatar}` : '';
+  // userInfo.value.avatar = `${BASE_URL}${res.avatar}`;
 }
 // 食物类型列表
 const foodTypes = ref([

@@ -1,18 +1,10 @@
 <template>
   <view class="details-container">
     <!-- 顶部导航栏 -->
-    <wd-navbar
-      fixed
-      safeAreaInsetTop
-      placeholder
-      title="美食详情"
-      left-arrow
-      @click-left="handleBack"
-    ></wd-navbar>
-
+    <wd-navbar fixed safeAreaInsetTop placeholder title="美食详情" left-arrow @click-left="handleBack"></wd-navbar>
     <!-- 图片轮播 -->
     <view class="swiper-container">
-      <wd-swiper :list="foodInfo.images"></wd-swiper>
+      <wd-swiper :list="imgurl"></wd-swiper>
     </view>
 
     <!-- 内容区域 -->
@@ -28,11 +20,8 @@
               }}</text>
             </view>
             <view class="collect-btn" @click.stop="handleCollect">
-              <wd-icon
-                :name="isCollected ? 'star-filled' : 'star'"
-                size="20"
-                :color="isCollected ? '#ffc600' : '#999'"
-              />
+              <wd-icon :name="isCollected ? 'star-filled' : 'star'" size="20"
+                :color="isCollected ? '#ffc600' : '#999'" />
             </view>
           </view>
         </view>
@@ -43,11 +32,7 @@
         <view class="reason-content">
           <text class="reason-text">{{ foodInfo.recommendation }}</text>
           <view class="recommender-info">
-            <image
-              :src="foodInfo.user.avatar"
-              class="avatar"
-              mode="aspectFill"
-            />
+            <image :src="`${BASE_URL}${foodInfo.user.avatar}`" class="avatar" mode="aspectFill" />
             <text class="username">{{ foodInfo.user.name }}</text>
           </view>
         </view>
@@ -82,11 +67,7 @@
         <!-- 用户评分输入 -->
         <view class="rating-input" v-show="!showActions">
           <view class="rating-stars">
-            <wd-rate
-              v-model="userRating"
-              :size="24"
-              @change="handleRatingChange"
-            />
+            <wd-rate v-model="userRating" :size="24" @change="handleRatingChange" />
             <text class="rating-tip">点击星星评分</text>
           </view>
         </view>
@@ -105,18 +86,11 @@
             </view>
           </view>
           <view class="stats-right">
-            <view
-              class="rating-bar"
-              v-for="(item, index) in ratingBars"
-              :key="index"
-            >
+            <view class="rating-bar" v-for="(item, index) in ratingBars" :key="index">
               <text class="star-count">{{ 5 - index }}星</text>
               <view class="bar-wrapper">
                 <view class="bar-bg">
-                  <view
-                    class="bar-fill"
-                    :style="{ width: item.percentage + '%' }"
-                  ></view>
+                  <view class="bar-fill" :style="{ width: item.percentage + '%' }"></view>
                 </view>
               </view>
               <text class="percentage">{{ item.percentage }}%</text>
@@ -128,20 +102,10 @@
 
     <!-- 悬浮按钮 -->
     <wd-fab v-if="showActions">
-      <wd-button
-        @click="handleEdit"
-        custom-class="custom-button"
-        type="primary"
-        round
-      >
+      <wd-button @click="handleEdit" custom-class="custom-button" type="primary" round>
         <wd-icon name="edit" size="22px"></wd-icon>
       </wd-button>
-      <wd-button
-        @click="handleDelete"
-        custom-class="custom-button"
-        type="warning"
-        round
-      >
+      <wd-button @click="handleDelete" custom-class="custom-button" type="warning" round>
         <wd-icon name="delete1" size="22px"></wd-icon>
       </wd-button>
     </wd-fab>
@@ -150,6 +114,7 @@
 </template>
 
 <script setup>
+import { BASE_URL } from "@/utils/request.js";
 import { foodDetail, deleteFood } from "@/api/food";
 import { useMessage } from "@/uni_modules/wot-design-uni";
 import { onLoad, onShow } from "@dcloudio/uni-app";
@@ -159,7 +124,7 @@ import { createCollection } from "@/api/collection";
 import { rating, getRatingList } from "@/api/rating";
 
 const foodId = ref("");
-
+const action = `${BASE_URL}/upload`;
 onLoad(async (options) => {
   foodId.value = options.id;
   await getFoodDetail();
@@ -178,10 +143,20 @@ onShow(async () => {
   userRating.value = foodInfo.value.userRating;
   await getUserRatingList();
 });
-
+const imgurl=ref([])
 async function getFoodDetail() {
   const res = await foodDetail(foodId.value);
   foodInfo.value = res;
+  if(foodInfo.value.imageUrl.length>0){
+	  imgurl.value=[]
+  	foodInfo.value.imageUrl.forEach(val=>{
+		val=`${BASE_URL}${val}`
+		 imgurl.value.push(val)
+
+	})
+  }else{
+  	  imgurl.value =['/static/12.png']
+  }
 }
 
 const foodTypes = [
@@ -213,7 +188,7 @@ const handleOpenLocation = () => {
     longitude: 113.32452, // 天河区体育西路的大致经度
     name: foodInfo.value.shopName,
     address: foodInfo.value.location,
-    success: () => {},
+    success: () => { },
     fail: (err) => {
       uni.showToast({
         title: "打开地图失败",
@@ -321,7 +296,7 @@ const handleDelete = () => {
         },
       });
     })
-    .catch(() => {});
+    .catch(() => { });
 };
 </script>
 
@@ -602,6 +577,7 @@ const handleDelete = () => {
     margin: 32rpx 0;
   }
 }
+
 :deep(.custom-button) {
   min-width: auto !important;
   box-sizing: border-box;

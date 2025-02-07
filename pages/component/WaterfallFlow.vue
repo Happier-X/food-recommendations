@@ -8,22 +8,25 @@
       <view class="waterfall-item" v-for="(item, index) in column" :key="index">
         <view class="food-card" @click="handleClickCard(item)">
           <image
-            :src="`${BASE_URL}${item.imageUrl[0]}`"
+		 style='border: 1px solid #ccc;'
+            :src="item.imageUrl[0]?`${BASE_URL}${item.imageUrl[0]}`:'/static/12.png'"
             mode="widthFix"
             class="food-image"
           />
+		
           <view class="card-content">
             <text class="title">{{ item.name }}</text>
             <view class="user-info">
-              <view class="user-left">
+              <view class="user-left" v-if='item.user'>
                 <image
+				 v-if='item.user.avatar'
                   :src="`${BASE_URL}${item.user.avatar}`"
                   class="avatar"
                   mode="aspectFill"
                 />
-                <text class="username">{{ item.user.name }}</text>
+                <text v-if='item.user.name' class="username">{{ item.user.name }}</text>
               </view>
-              <view class="rating">
+              <view class="rating" v-if=" item.averageRating">
                 <text class="rating-text">{{
                   item.averageRating.toFixed(1)
                 }}</text>

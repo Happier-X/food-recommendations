@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { onShow } from "@dcloudio/uni-app";
+import { onShow,onLoad } from "@dcloudio/uni-app";
 import { food } from "@/api/food";
 import WaterfallFlow from "../component/WaterfallFlow.vue";
 
